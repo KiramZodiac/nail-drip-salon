@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Scissors } from "lucide-react";
 import { Button } from "./ui/button";
 
 const Navbar = () => {
@@ -12,13 +12,19 @@ const Navbar = () => {
   };
 
   return (
-    <header className="bg-white sticky top-0 z-50 shadow-sm">
+    <header className="bg-gradient-to-r from-nail-pink to-nail-lavender sticky top-0 z-50 shadow-md">
       <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
-          <NavLink to="/" className="flex items-center">
-            <h1 className="text-2xl font-bold text-nail-purple">
-              Nagaayi <span className="text-nail-gold">Nails</span>
-            </h1>
+          <NavLink to="/" className="flex items-center gap-2">
+            <div className="bg-white p-2 rounded-full shadow-sm hidden sm:flex">
+              <Scissors className="h-6 w-6 text-nail-purple" />
+            </div>
+            <div className="flex flex-col sm:flex-row sm:items-center">
+              <h1 className="text-2xl font-bold text-nail-purple">
+                Nagaayi <span className="text-nail-gold">Nails</span>
+              </h1>
+              <span className="text-xs italic text-gray-700 sm:ml-2 hidden sm:block">Beauty at your fingertips</span>
+            </div>
           </NavLink>
 
           {/* Desktop Navigation */}
