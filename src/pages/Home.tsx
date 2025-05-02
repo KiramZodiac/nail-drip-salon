@@ -1,9 +1,8 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Nail, Star, Users, Clock } from "lucide-react";
+import { Scissors, Star, Users, Clock } from "lucide-react";
 
 const Home = () => {
   const [isTestimonialHovered, setIsTestimonialHovered] = useState<number | null>(null);
@@ -31,7 +30,7 @@ const Home = () => {
 
   const features = [
     {
-      icon: <Nail className="h-6 w-6 text-nail-purple" />,
+      icon: <Scissors className="h-6 w-6 text-nail-purple" />,
       title: "Premium Products",
       description: "We use only the highest quality, non-toxic nail products for a safer manicure experience."
     },

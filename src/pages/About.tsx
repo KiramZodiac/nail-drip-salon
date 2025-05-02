@@ -1,7 +1,7 @@
 
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Nail, Clock, Users, Star } from "lucide-react";
+import { Scissors, Clock, Users, Star } from "lucide-react";
 
 const About = () => {
   const team = [
@@ -37,7 +37,7 @@ const About = () => {
       description: "Your happiness is our priority. We tailor our services to meet your specific preferences and needs."
     },
     {
-      icon: <Nail className="h-8 w-8 text-nail-purple" />,
+      icon: <Scissors className="h-8 w-8 text-nail-purple" />,
       title: "Creativity & Innovation",
       description: "We constantly explore new techniques and designs to offer you the latest in nail fashion."
     },
