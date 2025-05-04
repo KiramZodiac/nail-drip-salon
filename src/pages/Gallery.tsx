@@ -12,7 +12,7 @@ const Gallery = () => {
     manicure: [
       {
         id: 1,
-        src: "https://images.unsplash.com/photo-1604654894609-ec91578d370f?q=80&w=800&auto=format&fit=crop",
+        src: "/luxPed.jpeg",
         alt: "Pink Gel Manicure",
         category: "manicure",
         title: "Pink Gel Manicure"
@@ -33,7 +33,7 @@ const Gallery = () => {
       },
       {
         id: 4,
-        src: "https://images.unsplash.com/photo-1604902396830-aca29e19b067?q=80&w=800&auto=format&fit=crop",
+        src: "/red.jpeg",
         alt: "Red Classic Manicure",
         category: "manicure",
         title: "Red Classic Manicure"
@@ -42,21 +42,21 @@ const Gallery = () => {
     pedicure: [
       {
         id: 5,
-        src: "https://images.unsplash.com/photo-1596224237507-996e64191f05?q=80&w=800&auto=format&fit=crop",
+        src: "/Gelx nails.jpeg",
         alt: "Spa Pedicure",
         category: "pedicure",
         title: "Spa Pedicure"
       },
       {
         id: 6,
-        src: "https://images.unsplash.com/photo-1555074493-6f41850a5290?q=80&w=800&auto=format&fit=crop",
+        src: "/pedi.jpeg",
         alt: "Red Pedicure",
         category: "pedicure",
         title: "Red Pedicure"
       },
       {
         id: 7,
-        src: "https://images.unsplash.com/photo-1641162609222-e83b87c5f14b?q=80&w=800&auto=format&fit=crop",
+        src: "nails.jpeg",
         alt: "French Pedicure",
         category: "pedicure",
         title: "French Pedicure"
@@ -72,7 +72,7 @@ const Gallery = () => {
       },
       {
         id: 9,
-        src: "https://images.unsplash.com/photo-1682983106536-6c000f3d06fb?q=80&w=800&auto=format&fit=crop",
+        src: "art.jpeg",
         alt: "Gel Extensions",
         category: "extensions",
         title: "Gel Extensions"
@@ -88,21 +88,21 @@ const Gallery = () => {
     art: [
       {
         id: 11,
-        src: "https://images.unsplash.com/photo-1611716524065-622f5e4d0281?q=80&w=800&auto=format&fit=crop",
+        src: "Bridal Nails.jpeg",
         alt: "Floral Nail Art",
         category: "art",
         title: "Floral Nail Art"
       },
       {
         id: 12,
-        src: "https://images.unsplash.com/photo-1626385324509-7e05ff2fe8bd?q=80&w=800&auto=format&fit=crop",
+        src: "Easy Nail.jpeg",
         alt: "Gemstone Nail Art",
         category: "art",
         title: "Gemstone Nail Art"
       },
       {
         id: 13,
-        src: "https://images.unsplash.com/photo-1600428877878-1a0fd85beda2?q=80&w=800&auto=format&fit=crop",
+        src: "maicure.jpeg",
         alt: "Geometric Nail Design",
         category: "art",
         title: "Geometric Nail Design"
@@ -143,7 +143,7 @@ const Gallery = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="bg-nail-lavender py-20">
+      <section className="bg-nail-lavender py-20 relative">
         <div className="container mx-auto px-4">
           <div className="text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">Our Nail Gallery</h1>
@@ -155,8 +155,8 @@ const Gallery = () => {
       </section>
 
       {/* Gallery Section */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
+      <section className="py-16 ">
+        <div className="container mx-auto px-4 ">
           <Tabs defaultValue="all" className="w-full" onValueChange={setActiveCategory}>
             <div className="flex justify-center mb-8">
               <TabsList className="bg-gray-100">
@@ -172,9 +172,9 @@ const Gallery = () => {
                 <TabsTrigger value="extensions" className="data-[state=active]:bg-nail-purple data-[state=active]:text-white">
                   Extensions
                 </TabsTrigger>
-                <TabsTrigger value="art" className="data-[state=active]:bg-nail-purple data-[state=active]:text-white">
+                 <TabsTrigger value="art" className="data-[state=active]:bg-nail-purple data-[state=active]:text-white max-sm:hidden">
                   Nail Art
-                </TabsTrigger>
+                </TabsTrigger> 
               </TabsList>
             </div>
 

@@ -13,11 +13,11 @@ const Layout = ({ children }: LayoutProps) => {
       <div className="relative">
         <div className="absolute inset-0 w-full h-[160px] overflow-hidden z-0">
           <div className="absolute inset-0 bg-gradient-to-r from-nail-pink/600 to-nail-lavender/60"></div>
-          {/* <img 
+           {/* <img 
             src="/public/nails.jpeg" 
             alt="Nail art background" 
             className="w-full h-full object-cover object-center opacity-40"
-          /> */}
+          />  */}
         </div>
         <Navbar />
       </div>

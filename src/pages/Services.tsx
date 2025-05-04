@@ -24,7 +24,7 @@ const Services = () => {
         description: "Long-lasting gel polish with perfect shine that stays chip-free for weeks.",
         price: "$35",
         duration: "45 mins",
-        image: "https://images.unsplash.com/photo-1604902396830-aca29e19b067?q=80&w=600&auto=format&fit=crop"
+        image: "gel.jpeg"
       },
       {
         id: 3,
@@ -32,7 +32,7 @@ const Services = () => {
         description: "Premium manicure with exfoliation, extended massage, paraffin wax, and premium polish.",
         price: "$45",
         duration: "60 mins",
-        image: "https://images.unsplash.com/photo-1600428877878-1a0fd85beda2?q=80&w=600&auto=format&fit=crop"
+        image: "/maicure.jpeg"
       }
     ],
     pedicure: [
@@ -50,7 +50,7 @@ const Services = () => {
         description: "Foot care with long-lasting gel polish application.",
         price: "$45",
         duration: "60 mins",
-        image: "https://images.unsplash.com/photo-1596224237507-996e64191f05?q=80&w=600&auto=format&fit=crop"
+        image: "/pedi.jpeg"
       },
       {
         id: 6,
@@ -58,7 +58,7 @@ const Services = () => {
         description: "Premium treatment with extended massage, hot stone therapy, and paraffin wax.",
         price: "$60",
         duration: "75 mins",
-        image: "https://images.unsplash.com/photo-1641162609222-e83b87c5f14b?q=80&w=600&auto=format&fit=crop"
+        image: "/luxPed.jpeg"
       }
     ],
     extensions: [
@@ -76,7 +76,7 @@ const Services = () => {
         description: "Natural-looking gel extensions that are lighter and more flexible than acrylic.",
         price: "$60",
         duration: "90 mins",
-        image: "https://images.unsplash.com/photo-1682983106536-6c000f3d06fb?q=80&w=600&auto=format&fit=crop"
+        image: "Gelx nails.jpeg"
       },
       {
         id: 9,
@@ -94,7 +94,7 @@ const Services = () => {
         description: "Simple designs like stripes, dots, or ombre effects.",
         price: "$10+",
         duration: "15+ mins",
-        image: "https://images.unsplash.com/photo-1611716524065-622f5e4d0281?q=80&w=600&auto=format&fit=crop"
+        image: "/Easy Nail.jpeg"
       },
       {
         id: 11,
@@ -102,7 +102,7 @@ const Services = () => {
         description: "Complex designs, 3D elements, or hand-painted artwork.",
         price: "$25+",
         duration: "30+ mins",
-        image: "https://images.unsplash.com/photo-1607779097040-26e80aa78e66?q=80&w=600&auto=format&fit=crop"
+        image: "/art.jpeg"
       },
       {
         id: 12,
@@ -110,7 +110,7 @@ const Services = () => {
         description: "Application of crystals, gems, or other 3D embellishments to your nails.",
         price: "$15+",
         duration: "20+ mins",
-        image: "https://images.unsplash.com/photo-1626385324509-7e05ff2fe8bd?q=80&w=600&auto=format&fit=crop"
+        image: "/Bridal Nails.jpeg"
       }
     ]
   };
@@ -160,9 +160,9 @@ const Services = () => {
                 <TabsTrigger value="extensions" className="data-[state=active]:bg-nail-purple data-[state=active]:text-white">
                   Extensions
                 </TabsTrigger>
-                <TabsTrigger value="art" className="data-[state=active]:bg-nail-purple data-[state=active]:text-white">
+                 <TabsTrigger value="art" className="data-[state=active]:bg-nail-purple data-[state=active]:text-white max-sm:hidden">
                   Nail Art
-                </TabsTrigger>
+                </TabsTrigger> 
               </TabsList>
             </div>
 

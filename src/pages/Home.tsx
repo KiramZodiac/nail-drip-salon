@@ -118,7 +118,7 @@ const Home = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="service-card bg-white rounded-lg overflow-hidden">
               <img 
-                src="https://images.unsplash.com/photo-1604902396830-aca29e19b067?q=80&w=600&auto=format&fit=crop" 
+                src="gel.jpeg" 
                 alt="Gel Manicure" 
                 className="w-full h-60 object-cover transition-transform duration-300"
               />
