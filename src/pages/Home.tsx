@@ -62,7 +62,7 @@ const Home = () => {
               Beautiful Nails For Beautiful People
             </h1>
             <p className="text-lg text-gray-700 mb-8 animate-slide-up">
-              Experience the art of nail perfection at Nagaayi Nails. Where luxury meets creativity.
+              Experience the art of nail perfection at Nail Drip. Where luxury meets creativity.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Button asChild size="lg" className="bg-nail-purple hover:bg-nail-purple/90">

@@ -28,7 +28,7 @@ const Navbar = () => {
           </NavLink>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-6  ">
+          <nav className="hidden md:flex items-center space-x-6 ">
             <NavLink 
               to="/" 
               className={({ isActive }) => 
