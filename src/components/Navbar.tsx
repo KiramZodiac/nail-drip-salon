@@ -12,7 +12,7 @@ const Navbar = () => {
   };
 
   return (
-    <header className="bg-gradient-to-r from-nail-pink to-nail-lavender sticky top-0 z-50 shadow-md">
+    <header className="bg-gradient-to-r from-nail-pink to-nail-lavender fixed w-full top-0 z-50 shadow-md">
       <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
           <NavLink to="/" className="flex items-center gap-2">
@@ -21,14 +21,14 @@ const Navbar = () => {
             </div>
             <div className="flex flex-col sm:flex-row sm:items-center">
               <h1 className="text-2xl font-bold text-nail-purple">
-                Nagaayi <span className="text-nail-gold">Nails</span>
+                Nail <span className="text-nail-gold">Drip</span>
               </h1>
               <span className="text-xs italic text-gray-700 sm:ml-2 hidden sm:block">Beauty at your fingertips</span>
             </div>
           </NavLink>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-6">
+          <nav className="hidden md:flex items-center space-x-6  ">
             <NavLink 
               to="/" 
               className={({ isActive }) => 

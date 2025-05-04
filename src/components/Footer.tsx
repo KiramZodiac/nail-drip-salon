@@ -8,7 +8,7 @@ const Footer = () => {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
           <div>
-            <h3 className="text-xl font-semibold mb-4">Nagaayi <span className="text-nail-gold">Nails</span></h3>
+            <h3 className="text-xl font-semibold mb-4">Nail <span className="text-nail-gold">Drip</span></h3>
             <p className="text-gray-600 mb-4">
               Premium nail salon offering a wide range of nail services with the highest quality products and exceptional care.
             </p>
@@ -62,14 +62,14 @@ const Footer = () => {
               </div>
               <div className="flex items-center">
                 <Phone size={18} className="text-nail-purple mr-2" />
-                <a href="tel:+1234567890" className="text-gray-600 hover:text-nail-purple transition-colors">
-                  (123) 456-7890
+                <a href="tel:+256751214095" className="text-gray-600 hover:text-nail-purple transition-colors">
+                  (123) 751214095
                 </a>
               </div>
               <div className="flex items-center">
                 <Mail size={18} className="text-nail-purple mr-2" />
                 <a href="mailto:info@nagaayinails.com" className="text-gray-600 hover:text-nail-purple transition-colors">
-                  info@nagaayinails.com
+                  info@naildrip.com
                 </a>
               </div>
             </div>
@@ -79,7 +79,7 @@ const Footer = () => {
         <div className="border-t border-gray-200 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-500 text-sm mb-4 md:mb-0">
-              &copy; {new Date().getFullYear()} Nagaayi Nails. All rights reserved.
+              &copy; {new Date().getFullYear()} Nail drip Nails. All rights reserved.
             </p>
             <div className="flex space-x-4 text-sm text-gray-500">
               <Link to="/privacy-policy" className="hover:text-nail-purple transition-colors">
@@ -97,3 +97,5 @@ const Footer = () => {
 };
 
 export default Footer;
+
+

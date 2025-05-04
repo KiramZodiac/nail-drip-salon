@@ -54,7 +54,7 @@ const Home = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="relative h-[80vh] bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1604654894609-ec91578d370f?q=80&w=1920&auto=format&fit=crop')" }}>
+      <section className="relative h-[80vh] bg-cover bg-center" style={{ backgroundImage: "url('./public/nails.jpeg')" }}>
         <div className="absolute inset-0 hero-overlay"></div>
         <div className="container mx-auto px-4 h-full flex items-center relative z-10">
           <div className="max-w-xl">
@@ -83,7 +83,7 @@ const Home = () => {
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Why Choose Us</h2>
             <div className="w-24 h-1 bg-nail-purple mx-auto mb-4"></div>
             <p className="text-gray-600 max-w-xl mx-auto">
-              At Nagaayi Nails, we are committed to providing exceptional nail care services in a relaxing and luxurious environment.
+              At Nail Drip Nails, we are committed to providing exceptional nail care services in a relaxing and luxurious environment.
             </p>
           </div>
 

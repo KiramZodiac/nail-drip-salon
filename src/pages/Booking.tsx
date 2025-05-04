@@ -56,18 +56,33 @@ const Booking = () => {
       notes: "",
     },
   });
-
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    setIsSubmitting(true);
-    
-    // Simulate API call
-    setTimeout(() => {
-      console.log("Booking submitted:", data);
-      toast.success("Booking request submitted successfully! We'll confirm your appointment soon.");
-      form.reset();
-      setIsSubmitting(false);
-    }, 1500);
+  
+  const onSubmit = async (formData) => {
+    setIsSubmitting(true)
+    try {
+      const response = await fetch('http://localhost:5000/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+  
+       const data = await response.json();
+      if (response.ok) {
+        toast('Appointment request sent!',{description:"Appointment created,we shall confirm to you shortly."});
+        form.reset()
+       
+      } else {
+        alert('Failed to send. Try again later.');
+       
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      alert('Server error. Please try again.');
+    } finally{
+      setIsSubmitting(false)
+    }
   };
+  
 
   const serviceOptions = [
     { value: "classic-manicure", label: "Classic Manicure" },
@@ -101,7 +116,7 @@ const Booking = () => {
           <div className="text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">Book an Appointment</h1>
             <p className="text-lg text-gray-700 max-w-2xl mx-auto">
-              Schedule your visit to Nagaayi Nails and treat yourself to a luxurious nail experience.
+              Schedule your visit to Nail Drip and treat yourself to a luxurious nail experience.
             </p>
           </div>
         </div>
@@ -333,7 +348,7 @@ const Booking = () => {
                     </p>
                     <p className="font-medium">
                       <a href="tel:+1234567890" className="text-nail-purple hover:underline">
-                        (123) 456-7890
+                        (256) 751214095
                       </a>
                     </p>
                   </div>

@@ -134,7 +134,7 @@ const Services = () => {
       <section className="bg-nail-pink py-20">
         <div className="container mx-auto px-4">
           <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Our Services</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-7">Our Services</h1>
             <p className="text-lg text-gray-700 max-w-2xl mx-auto">
               Discover our complete range of nail treatments and services designed to pamper you and make your nails look stunning.
             </p>

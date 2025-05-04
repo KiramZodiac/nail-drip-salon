@@ -54,7 +54,7 @@ const About = () => {
       <section className="bg-nail-lavender py-20">
         <div className="container mx-auto px-4">
           <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">About Nagaayi Nails</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">About Nail Drip </h1>
             <p className="text-lg text-gray-700 max-w-2xl mx-auto">
               Discover the story behind our premium nail salon and the passionate team dedicated to your nail care.
             </p>
@@ -70,10 +70,10 @@ const About = () => {
               <h2 className="text-3xl font-bold mb-4">Our Story</h2>
               <div className="w-20 h-1 bg-nail-purple mb-6"></div>
               <p className="text-gray-700 mb-4">
-                Founded in 2018, Nagaayi Nails began with a simple mission: to provide exceptional nail care services in a luxurious yet welcoming environment. Our founder, Isabella Johnson, saw a need for a nail salon that prioritized both quality and client experience.
+                Founded in 2018, Nail Drip began with a simple mission: to provide exceptional nail care services in a luxurious yet welcoming environment. Our founder, Isabella Johnson, saw a need for a nail salon that prioritized both quality and client experience.
               </p>
               <p className="text-gray-700 mb-4">
-                The name "Nagaayi" derives from a Ugandan word meaning "beautiful," reflecting our commitment to enhancing the natural beauty of every client who walks through our doors.
+                The name "Nail Drip" reflecting our commitment to enhancing the natural beauty of every client who walks through our doors.
               </p>
               <p className="text-gray-700 mb-4">
                 What started as a small boutique salon has grown into a beloved establishment known for its attention to detail, creative designs, and unparalleled customer service. Our team of skilled nail technicians brings years of experience and a passion for nail artistry.
@@ -84,7 +84,7 @@ const About = () => {
             </div>
             <div className="relative">
               <img 
-                src="https://images.unsplash.com/photo-1604654894609-ec91578d370f?q=80&w=800&auto=format&fit=crop" 
+                src="/public/nails.jpeg" 
                 alt="Nagaayi Nails Salon" 
                 className="rounded-lg shadow-lg object-cover h-full"
               />
@@ -103,7 +103,7 @@ const About = () => {
             <h2 className="text-3xl font-bold mb-4">Our Values</h2>
             <div className="w-24 h-1 bg-nail-purple mx-auto mb-6"></div>
             <p className="text-gray-700 max-w-2xl mx-auto">
-              At Nagaayi Nails, our core values guide everything we do, from how we treat our clients to the quality of our services.
+              At Nail Drip, our core values guide everything we do, from how we treat our clients to the quality of our services.
             </p>
           </div>
 
@@ -166,7 +166,7 @@ const About = () => {
               <h2 className="text-3xl font-bold mb-4">Premium Products</h2>
               <div className="w-20 h-1 bg-nail-purple mb-6"></div>
               <p className="text-gray-700 mb-4">
-                At Nagaayi Nails, we believe that exceptional nail services start with high-quality products. We carefully select our polishes, tools, and treatment products from trusted brands that share our commitment to quality and safety.
+                At Nail Drip, we believe that exceptional nail services start with high-quality products. We carefully select our polishes, tools, and treatment products from trusted brands that share our commitment to quality and safety.
               </p>
               <p className="text-gray-700 mb-4">
                 We prioritize non-toxic, cruelty-free products that are gentle on your nails while providing stunning results. Our gel polishes offer long-lasting wear without damage, and our treatment products nourish and strengthen your natural nails.
@@ -185,7 +185,7 @@ const About = () => {
       {/* Call to Action */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">Experience Nagaayi Nails</h2>
+          <h2 className="text-3xl font-bold mb-4">Experience Nail Drip</h2>
           <p className="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">
             Ready to experience our premium nail services? Book an appointment today and let our talented team take care of you.
           </p>
