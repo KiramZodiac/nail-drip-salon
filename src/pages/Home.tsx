@@ -54,7 +54,7 @@ const Home = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="relative h-[80vh] bg-cover bg-center" style={{ backgroundImage: "url('./public/nails.jpeg')" }}>
+      <section className="relative h-[80vh] bg-cover bg-center" style={{ backgroundImage: "url('/nails.jpeg')" }}>
         <div className="absolute inset-0 hero-overlay"></div>
         <div className="container mx-auto px-4 h-full flex items-center relative z-10">
           <div className="max-w-xl">
