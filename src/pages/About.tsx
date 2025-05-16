@@ -84,7 +84,7 @@ const About = () => {
             </div>
             <div className="relative">
               <img 
-                src="/public/nails.jpeg" 
+                src="/nails.jpeg" 
                 alt="Nagaayi Nails Salon" 
                 className="rounded-lg shadow-lg object-cover h-full"
               />
