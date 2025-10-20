@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
 
 interface HeroSlide {
@@ -16,6 +17,7 @@ interface HeroSlide {
 }
 
 const Hero = () => {
+  const navigate = useNavigate();
   const [slides, setSlides] = useState<HeroSlide[]>([]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
@@ -224,7 +226,7 @@ const Hero = () => {
               >
                 <Button
                   size="lg"
-                  onClick={() => window.location.href = currentSlideData.button_url!}
+                  onClick={() => navigate(currentSlideData.button_url!)}
                   className="relative px-12 py-5 text-lg rounded-full font-semibold overflow-hidden transition-all duration-500 hover:shadow-[0_0_30px_#f472b6] bg-gradient-to-r from-pink-500/70 to-purple-500/70 backdrop-blur-lg text-white border border-white/30"
                 >
                   <span className="relative z-10">{currentSlideData.button_text}</span>

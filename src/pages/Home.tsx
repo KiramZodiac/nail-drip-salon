@@ -36,7 +36,7 @@ const Home = () => {
     };
 
     // Start animations with slight delay
-    const timer1 = setTimeout(() => animateCount(setTechnicianCount, 50, 1500), 200);
+    const timer1 = setTimeout(() => animateCount(setTechnicianCount, 10, 1500), 200);
     const timer2 = setTimeout(() => animateCount(setPolishCount, 600, 2000), 400);
 
     return () => {

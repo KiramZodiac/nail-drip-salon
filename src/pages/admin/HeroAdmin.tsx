@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
   Plus, 
   Edit, 
@@ -38,6 +39,20 @@ interface HeroSlide {
   created_at: string;
   updated_at: string;
 }
+
+// Valid site routes that can be used for hero button URLs
+const VALID_ROUTES = [
+  { value: "none", label: "No Button" },
+  { value: "/", label: "Home" },
+  { value: "/services", label: "Services" },
+  { value: "/training", label: "Training" },
+  { value: "/gallery", label: "Gallery" },
+  { value: "/about", label: "About" },
+  { value: "/contact", label: "Contact" },
+  { value: "/booking", label: "Booking" },
+  { value: "/privacy-policy", label: "Privacy Policy" },
+  { value: "/terms-conditions", label: "Terms & Conditions" }
+];
 
 const HeroAdmin = () => {
   const [slides, setSlides] = useState<HeroSlide[]>([]);
@@ -81,12 +96,25 @@ const HeroAdmin = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Validate that if button_url is provided, button_text must also be provided
+    if (formData.button_url && formData.button_url !== "none" && !formData.button_text.trim()) {
+      toast.error("Button text is required when a button URL is selected");
+      return;
+    }
+    
+    // If no button URL is selected, clear button text and URL
+    const submitData = {
+      ...formData,
+      button_text: formData.button_url && formData.button_url !== "none" ? formData.button_text : "",
+      button_url: formData.button_url && formData.button_url !== "none" ? formData.button_url : ""
+    };
+    
     try {
       if (editingSlide) {
         // Update existing slide
         const { error } = await supabase
           .from('hero_slides')
-          .update(formData)
+          .update(submitData)
           .eq('id', editingSlide.id);
 
         if (error) throw error;
@@ -95,7 +123,7 @@ const HeroAdmin = () => {
         // Create new slide
         const { error } = await supabase
           .from('hero_slides')
-          .insert([formData]);
+          .insert([submitData]);
 
         if (error) throw error;
         toast.success("Hero slide created successfully");
@@ -119,7 +147,7 @@ const HeroAdmin = () => {
       description: slide.description || "",
       image_url: slide.image_url,
       button_text: slide.button_text || "",
-      button_url: slide.button_url || "",
+      button_url: slide.button_url || "none",
       display_order: slide.display_order,
       is_active: slide.is_active
     });
@@ -197,7 +225,7 @@ const HeroAdmin = () => {
       description: "",
       image_url: "",
       button_text: "",
-      button_url: "",
+      button_url: "none",
       display_order: slides.length,
       is_active: true
     });
@@ -431,22 +459,37 @@ const HeroAdmin = () => {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="button_text">Button Text</Label>
+                <Label htmlFor="button_text">
+                  Button Text {formData.button_url && formData.button_url !== "none" && <span className="text-red-500">*</span>}
+                </Label>
                 <Input
                   id="button_text"
                   value={formData.button_text}
                   onChange={(e) => setFormData({ ...formData, button_text: e.target.value })}
                   placeholder="Call to Action"
+                  className={formData.button_url && formData.button_url !== "none" && !formData.button_text.trim() ? "border-red-500" : ""}
                 />
+                {formData.button_url && formData.button_url !== "none" && !formData.button_text.trim() && (
+                  <p className="text-sm text-red-500 mt-1">Button text is required when a URL is selected</p>
+                )}
               </div>
               <div>
                 <Label htmlFor="button_url">Button URL</Label>
-                <Input
-                  id="button_url"
+                <Select
                   value={formData.button_url}
-                  onChange={(e) => setFormData({ ...formData, button_url: e.target.value })}
-                  placeholder="/services or https://example.com"
-                />
+                  onValueChange={(value) => setFormData({ ...formData, button_url: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a page to link to" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {VALID_ROUTES.map((route) => (
+                      <SelectItem key={route.value} value={route.value}>
+                        {route.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 
