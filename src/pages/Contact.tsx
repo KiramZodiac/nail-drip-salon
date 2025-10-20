@@ -1,4 +1,5 @@
 
+
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -17,6 +18,7 @@ import {
 } from "@/components/ui/form";
 import { toast } from "@/components/ui/sonner";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters" }),
@@ -40,16 +42,36 @@ const Contact = () => {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      console.log("Form submitted:", data);
-      toast.success("Message sent successfully! We'll get back to you soon.");
-      form.reset();
+    try {
+      const { error } = await supabase
+        .from('contact_messages')
+        .insert([
+          {
+            name: data.name,
+            email: data.email,
+            phone: data.phone,
+            subject: data.subject,
+            message: data.message,
+            status: 'new'
+          }
+        ]);
+
+      if (error) {
+        console.error('Error saving message:', error);
+        toast.error("Failed to send message. Please try again.");
+      } else {
+        toast.success("Message sent successfully! We'll get back to you soon.");
+        form.reset();
+      }
+    } catch (error) {
+      console.error('Error saving message:', error);
+      toast.error("Failed to send message. Please try again.");
+    } finally {
       setIsSubmitting(false);
-    }, 1500);
+    }
   };
 
   return (

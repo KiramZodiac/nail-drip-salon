@@ -99,13 +99,18 @@ export default {
 				'slide-up': {
 					from: { transform: 'translateY(10px)', opacity: '0' },
 					to: { transform: 'translateY(0)', opacity: '1' }
+				},
+				'ken-burns': {
+					'0%': { transform: 'scale(1.2)' },
+					'100%': { transform: 'scale(1)' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'fade-in': 'fade-in 0.5s ease-out',
-				'slide-up': 'slide-up 0.5s ease-out'
+				'slide-up': 'slide-up 0.5s ease-out',
+				'ken-burns': 'ken-burns 5s ease-out forwards'
 			},
 			fontFamily: {
 				'playfair': ['Playfair Display', 'serif'],

@@ -1,9 +1,11 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useSearchParams } from "react-router-dom";
+import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent } from "@/components/ui/card";
@@ -45,6 +47,38 @@ const formSchema = z.object({
 
 const Booking = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [services, setServices] = useState<Service[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchParams] = useSearchParams();
+
+  // Fetch services from database
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('services')
+          .select('*')
+          .eq('is_active', true)
+          .order('display_order', { ascending: true });
+
+        if (error) {
+          console.error('Error fetching services:', error);
+        } else {
+          setServices(data || []);
+        }
+      } catch (error) {
+        console.error('Error fetching services:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchServices();
+  }, []);
+
+  // Get preselected service from URL parameters
+  const preselectedServiceId = searchParams.get('serviceId');
+  const preselectedService = services.find(service => service.id === preselectedServiceId);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -52,10 +86,21 @@ const Booking = () => {
       name: "",
       email: "",
       phone: "",
-      service: "",
+      service: preselectedServiceId || "",
       notes: "",
     },
   });
+
+  // Watch the form's service field to get the currently selected service
+  const selectedServiceId = form.watch('service');
+  const selectedService = services.find(service => service.id === selectedServiceId);
+
+  // Update form when preselected service changes
+  useEffect(() => {
+    if (preselectedServiceId) {
+      form.setValue('service', preselectedServiceId);
+    }
+  }, [preselectedServiceId, form]);
   
   const onSubmit = async (formData) => {
     setIsSubmitting(true)
@@ -84,20 +129,7 @@ const Booking = () => {
   };
   
 
-  const serviceOptions = [
-    { value: "classic-manicure", label: "Classic Manicure" },
-    { value: "gel-manicure", label: "Gel Manicure" },
-    { value: "luxury-spa-manicure", label: "Luxury Spa Manicure" },
-    { value: "classic-pedicure", label: "Classic Pedicure" },
-    { value: "gel-pedicure", label: "Gel Pedicure" },
-    { value: "luxury-spa-pedicure", label: "Luxury Spa Pedicure" },
-    { value: "acrylic-extensions", label: "Acrylic Extensions" },
-    { value: "gel-extensions", label: "Gel Extensions" },
-    { value: "nail-refill", label: "Nail Refill" },
-    { value: "basic-nail-art", label: "Basic Nail Art" },
-    { value: "advanced-nail-art", label: "Advanced Nail Art" },
-    { value: "crystal-gem-application", label: "Crystal/Gem Application" },
-  ];
+  // Service options will be generated from database
 
   const timeOptions = [
     "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM",
@@ -130,6 +162,26 @@ const Booking = () => {
               <Card>
                 <CardContent className="p-8">
                   <h2 className="text-2xl font-bold mb-6">Request an Appointment</h2>
+                  
+                  {selectedService && (
+                    <div className="mb-6 p-4 bg-nail-pink/20 border border-nail-purple/20 rounded-lg">
+                      <h3 className="font-semibold text-nail-purple mb-2">Selected Service</h3>
+                      <p className="text-gray-700">
+                        <strong>{selectedService.name}</strong> - ${selectedService.price}
+                        {selectedService.description && (
+                          <span className="block text-sm text-gray-600 mt-1">
+                            {selectedService.description}
+                          </span>
+                        )}
+                      </p>
+                      <p className="text-xs text-gray-500 mt-2">
+                        Duration: {selectedService.duration_minutes < 60 
+                          ? `${selectedService.duration_minutes} minutes` 
+                          : `${Math.floor(selectedService.duration_minutes / 60)}h ${selectedService.duration_minutes % 60}m`
+                        }
+                      </p>
+                    </div>
+                  )}
 
                   <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -190,11 +242,17 @@ const Booking = () => {
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
-                                {serviceOptions.map((option) => (
-                                  <SelectItem key={option.value} value={option.value}>
-                                    {option.label}
+                                {loading ? (
+                                  <SelectItem value="loading" disabled>
+                                    Loading services...
                                   </SelectItem>
-                                ))}
+                                ) : (
+                                  services.map((service) => (
+                                    <SelectItem key={service.id} value={service.id}>
+                                      {service.name} - ${service.price}
+                                    </SelectItem>
+                                  ))
+                                )}
                               </SelectContent>
                             </Select>
                             <FormMessage />
@@ -361,5 +419,17 @@ const Booking = () => {
     </div>
   );
 };
+
+// Service interface
+interface Service {
+  id: string;
+  name: string;
+  description: string | null;
+  category: string;
+  duration_minutes: number;
+  price: number;
+  image_url: string | null;
+  display_order: number | null;
+}
 
 export default Booking;
