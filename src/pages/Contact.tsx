@@ -77,7 +77,7 @@ const Contact = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="bg-nail-pink py-20">
+      <section className="bg-nail-pink py-28">
         <div className="container mx-auto px-4">
           <div className="text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">Contact Us</h1>
