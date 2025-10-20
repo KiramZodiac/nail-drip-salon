@@ -1,0 +1,17 @@
+# Netlify redirects for Single Page Application (SPA)
+# This ensures that all routes are handled by index.html for client-side routing
+
+# Redirect all routes to index.html with 200 status
+/*    /index.html   200
+
+# Optional: Redirect common routes explicitly (these are handled by the above rule)
+# /gallery    /index.html   200
+# /services   /index.html   200
+# /training   /index.html   200
+# /about      /index.html   200
+# /contact    /index.html   200
+# /booking    /index.html   200
+# /privacy-policy    /index.html   200
+# /terms-conditions  /index.html   200
+# /admin      /index.html   200
+# /admin/*    /index.html   200
