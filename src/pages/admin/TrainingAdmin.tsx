@@ -86,7 +86,7 @@ const TrainingAdmin = () => {
     title: "",
     description: "",
     category: "student-work",
-    course_id: "",
+    course_id: null as string | null,
     is_active: true,
     display_order: 0
   });
@@ -119,10 +119,31 @@ const TrainingAdmin = () => {
     e.preventDefault();
     
     try {
+      // Prepare data with proper null handling for optional fields
+      const courseData = {
+        ...courseFormData,
+        description: courseFormData.description || null,
+        duration: courseFormData.duration || null,
+        price_display: courseFormData.price_display || null,
+        level: courseFormData.level || null,
+        max_students: courseFormData.max_students || null,
+        instructor: courseFormData.instructor || null,
+        image_url: courseFormData.image_url || null,
+        video_url: courseFormData.video_url || null,
+        what_you_learn: courseFormData.what_you_learn.length > 0 ? courseFormData.what_you_learn : null,
+        prerequisites: courseFormData.prerequisites.length > 0 ? courseFormData.prerequisites : null,
+        certification: courseFormData.certification || null,
+        schedule: courseFormData.schedule || null,
+        rating: courseFormData.rating || null,
+        reviews_count: courseFormData.reviews_count || null,
+        is_active: courseFormData.is_active,
+        display_order: courseFormData.display_order || null
+      };
+
       if (editingCourse) {
         const { error } = await supabase
           .from('training_courses')
-          .update(courseFormData)
+          .update(courseData)
           .eq('id', editingCourse.id);
 
         if (error) throw error;
@@ -130,7 +151,7 @@ const TrainingAdmin = () => {
       } else {
         const { error } = await supabase
           .from('training_courses')
-          .insert([courseFormData]);
+          .insert([courseData]);
 
         if (error) throw error;
         toast.success("Course created successfully");
@@ -150,10 +171,16 @@ const TrainingAdmin = () => {
     e.preventDefault();
     
     try {
+      // Prepare data with proper null handling for course_id
+      const mediaData = {
+        ...mediaFormData,
+        course_id: mediaFormData.course_id || null
+      };
+
       if (editingMedia) {
         const { error } = await supabase
           .from('training_media')
-          .update(mediaFormData)
+          .update(mediaData)
           .eq('id', editingMedia.id);
 
         if (error) throw error;
@@ -161,7 +188,7 @@ const TrainingAdmin = () => {
       } else {
         const { error } = await supabase
           .from('training_media')
-          .insert([mediaFormData]);
+          .insert([mediaData]);
 
         if (error) throw error;
         toast.success("Media created successfully");
@@ -211,7 +238,7 @@ const TrainingAdmin = () => {
       title: media.title,
       description: media.description || "",
       category: media.category,
-      course_id: media.course_id || "",
+      course_id: media.course_id || null,
       is_active: media.is_active || false,
       display_order: media.display_order || 0
     });
@@ -281,7 +308,7 @@ const TrainingAdmin = () => {
       title: "",
       description: "",
       category: "student-work",
-      course_id: "",
+      course_id: null,
       is_active: true,
       display_order: 0
     });

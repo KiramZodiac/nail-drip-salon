@@ -143,7 +143,7 @@ const Booking = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="bg-nail-lavender py-20">
+      <section className="bg-nail-lavender py-32">
         <div className="container mx-auto px-4">
           <div className="text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">Book an Appointment</h1>

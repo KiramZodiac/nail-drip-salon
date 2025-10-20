@@ -293,14 +293,21 @@ const Contact = () => {
 
       {/* Map Section */}
       <section className="py-0">
-        <div className="h-96 w-full">
+        <div className="relative h-[500px] w-full overflow-hidden">
           <iframe 
             title="Nagaayi Nails Location"
             className="w-full h-full border-0"
             src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d3989.7552257428842!2d32.55391117572888!3d0.32222389204520135!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1sNakulabye%20round!5e0!3m2!1sen!2sug!4v1746215095425!5m2!1sen!2sug"
-
             loading="lazy"
+            allowFullScreen
+            referrerPolicy="no-referrer-when-downgrade"
+            style={{
+              filter: 'contrast(1.1) brightness(1.05) saturate(1.1)',
+              transform: 'scale(1.02)',
+              transformOrigin: 'center'
+            }}
           ></iframe>
+          <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/5 to-transparent"></div>
         </div>
       </section>
     </div>

@@ -1,29 +1,85 @@
 
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Scissors, Clock, Users, Star } from "lucide-react";
+import { supabase } from "@/lib/supabase";
+
+interface Staff {
+  id: string;
+  first_name: string;
+  last_name: string;
+  role: string;
+  bio: string | null;
+  profile_image_url: string | null;
+  specialties: string[] | null;
+  is_active: boolean | null;
+  display_order: number | null;
+}
 
 const About = () => {
-  const team = [
-    {
-      name: "Isabella Johnson",
-      role: "Founder & Master Nail Artist",
-      bio: "With over 15 years of experience, Isabella founded Nagaayi Nails with a vision of creating a luxurious yet welcoming nail salon that focuses on quality and client care.",
-      image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=600&auto=format&fit=crop"
-    },
-    {
-      name: "Michael Chen",
-      role: "Senior Nail Technician",
-      bio: "Known for his precision and attention to detail, Michael specializes in intricate nail art designs and has won multiple awards for his creative work.",
-      image: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=600&auto=format&fit=crop"
-    },
-    {
-      name: "Sophia Rodriguez",
-      role: "Nail Artist & Educator",
-      bio: "Sophia brings her artistic background to create stunning nail designs. She also leads our nail technician training program and keeps our team updated on the latest techniques.",
-      image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600&auto=format&fit=crop"
+  const [team, setTeam] = useState<Staff[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchStaff();
+  }, []);
+
+  const fetchStaff = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('staff')
+        .select('*')
+        .eq('is_active', true)
+        .order('display_order', { ascending: true });
+
+      if (error) {
+        console.error('Error fetching staff:', error);
+        // Fallback to dummy data if database fails
+        setTeam([
+          {
+            id: '1',
+            first_name: 'Isabella',
+            last_name: 'Johnson',
+            role: 'Founder & Master Nail Artist',
+            bio: 'With over 15 years of experience, Isabella founded Nail Drip with a vision of creating a luxurious yet welcoming nail salon that focuses on quality and client care.',
+            profile_image_url: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=600&auto=format&fit=crop',
+            specialties: ['Nail Art', 'Gel Extensions'],
+            is_active: true,
+            display_order: 1
+          },
+          {
+            id: '2',
+            first_name: 'Michael',
+            last_name: 'Chen',
+            role: 'Senior Nail Technician',
+            bio: 'Known for his precision and attention to detail, Michael specializes in intricate nail art designs and has won multiple awards for his creative work.',
+            profile_image_url: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=600&auto=format&fit=crop',
+            specialties: ['Nail Art', 'French Manicures'],
+            is_active: true,
+            display_order: 2
+          },
+          {
+            id: '3',
+            first_name: 'Sophia',
+            last_name: 'Rodriguez',
+            role: 'Nail Artist & Educator',
+            bio: 'Sophia brings her artistic background to create stunning nail designs. She also leads our nail technician training program and keeps our team updated on the latest techniques.',
+            profile_image_url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600&auto=format&fit=crop',
+            specialties: ['Training', 'Nail Art'],
+            is_active: true,
+            display_order: 3
+          }
+        ]);
+      } else {
+        setTeam(data || []);
+      }
+    } catch (error) {
+      console.error('Error fetching staff:', error);
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
 
   const values = [
     {
@@ -84,7 +140,7 @@ const About = () => {
             </div>
             <div className="relative">
               <img 
-                src="/nails.jpeg" 
+                src="/extensions.jpeg" 
                 alt="Nagaayi Nails Salon" 
                 className="rounded-lg shadow-lg object-cover h-full"
               />
@@ -132,22 +188,70 @@ const About = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {team.map((member, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:-translate-y-2">
-                <img 
-                  src={member.image} 
-                  alt={member.name} 
-                  className="w-full h-64 object-cover"
-                />
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold mb-1">{member.name}</h3>
-                  <p className="text-nail-purple mb-4">{member.role}</p>
-                  <p className="text-gray-600">{member.bio}</p>
+          {loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {[1, 2, 3].map((index) => (
+                <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden animate-pulse">
+                  <div className="relative overflow-hidden">
+                    <div className="w-full h-96 bg-gray-200"></div>
+                  </div>
+                  <div className="p-6">
+                    <div className="h-6 bg-gray-200 rounded mb-2"></div>
+                    <div className="h-4 bg-gray-200 rounded mb-4"></div>
+                    <div className="h-4 bg-gray-200 rounded mb-2"></div>
+                    <div className="h-4 bg-gray-200 rounded"></div>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : team.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {team.map((member) => (
+                <div key={member.id} className="bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:-translate-y-2 hover:shadow-xl">
+                  <div className="relative overflow-hidden">
+                    <img 
+                      src={member.profile_image_url || '/placeholder.svg'} 
+                      alt={`${member.first_name} ${member.last_name}`}
+                      className="w-full h-96 object-cover transition-transform duration-300 hover:scale-105"
+                      style={{
+                        imageRendering: 'high-quality',
+                        filter: 'contrast(1.1) brightness(1.05) saturate(1.1)',
+                        WebkitFilter: 'contrast(1.1) brightness(1.05) saturate(1.1)',
+                        objectPosition: 'center 30%'
+                      }}
+                      loading="lazy"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = '/placeholder.svg';
+                      }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-xl font-semibold mb-1">{member.first_name} {member.last_name}</h3>
+                    <p className="text-nail-purple mb-4">{member.role}</p>
+                    <p className="text-gray-600 mb-4">{member.bio}</p>
+                    {member.specialties && member.specialties.length > 0 && (
+                      <div className="flex flex-wrap gap-2">
+                        {member.specialties.map((specialty, index) => (
+                          <span 
+                            key={index}
+                            className="px-2 py-1 bg-nail-pink/20 text-nail-purple text-xs rounded-full"
+                          >
+                            {specialty}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-gray-500 text-lg">No team members found.</p>
+            </div>
+          )}
         </div>
       </section>
 

@@ -135,7 +135,7 @@ const Gallery = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="bg-nail-lavender py-28 relative">
+      <section className="bg-nail-lavender py-32 relative">
         <div className="container mx-auto px-4">
           <motion.div 
             initial={{ opacity: 0, y: 30 }}

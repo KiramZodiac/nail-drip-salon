@@ -99,7 +99,7 @@ const Training = () => {
       <section className="relative h-[70vh] overflow-hidden">
         <div className="absolute inset-0 bg-black/40 z-10"></div>
         <img 
-          src="/nails.jpeg" 
+          src="/training.jpeg" 
           alt="Professional Nail Training"
           className="absolute inset-0 w-full h-full object-cover"
         />
@@ -258,14 +258,27 @@ const Training = () => {
       <Dialog open={!!selectedVideo} onOpenChange={() => setSelectedVideo(null)}>
         <DialogContent className="max-w-4xl w-full">
           {selectedVideo && (
-            <video 
-              className="w-full h-auto" 
-              controls 
-              autoPlay
-              src={selectedVideo}
-            >
-              Your browser does not support the video tag.
-            </video>
+            <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden">
+              <video 
+                className="w-full h-full object-contain" 
+                controls 
+                autoPlay
+                preload="metadata"
+                crossOrigin="anonymous"
+                onError={(e) => {
+                  console.error('Video playback error:', e);
+                  toast.error("Unable to play this video format");
+                }}
+              >
+                <source src={selectedVideo} type="video/mp4" />
+                <source src={selectedVideo} type="video/webm" />
+                <source src={selectedVideo} type="video/ogg" />
+                <source src={selectedVideo} type="video/avi" />
+                <source src={selectedVideo} type="video/mov" />
+                <source src={selectedVideo} type="video/wmv" />
+                Your browser does not support the video tag or this video format.
+              </video>
+            </div>
           )}
         </DialogContent>
       </Dialog>
@@ -281,11 +294,16 @@ interface CourseCardProps {
 const CourseCard = ({ course, onVideoClick }: CourseCardProps) => {
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow">
-      <div className="relative h-48 overflow-hidden">
+      <div className="relative h-64 overflow-hidden">
         <img 
           src={course.image_url || '/placeholder.svg'} 
           alt={course.title}
           className="w-full h-full object-cover"
+          style={{
+            filter: 'contrast(1.1) brightness(1.05) saturate(1.1)',
+            imageRendering: 'high-quality'
+          }}
+          loading="lazy"
         />
         {course.video_url && (
           <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
@@ -306,38 +324,33 @@ const CourseCard = ({ course, onVideoClick }: CourseCardProps) => {
         )}
       </div>
       
-      <CardHeader>
-        <CardTitle className="text-xl">{course.title}</CardTitle>
-        <div className="flex items-center gap-2 text-sm text-gray-600">
-          <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-          <span>{course.rating || 0}</span>
-          <span>({course.reviews_count || 0} reviews)</span>
-        </div>
+      <CardHeader className="pb-3">
+        <CardTitle className="text-lg">{course.title}</CardTitle>
       </CardHeader>
       
-      <CardContent>
-        <p className="text-gray-600 mb-4">{course.description}</p>
+      <CardContent className="pt-0">
+        <p className="text-gray-600 mb-3 text-sm line-clamp-2">{course.description}</p>
         
-        <div className="space-y-2 mb-4">
-          <div className="flex items-center gap-2 text-sm">
-            <Clock className="h-4 w-4 text-gray-500" />
+        <div className="grid grid-cols-3 gap-2 mb-3 text-xs">
+          <div className="flex items-center gap-1">
+            <Clock className="h-3 w-3 text-gray-500" />
             <span>{course.duration || 'TBD'}</span>
           </div>
-          <div className="flex items-center gap-2 text-sm">
-            <Users className="h-4 w-4 text-gray-500" />
-            <span>Max {course.max_students || 8} students</span>
+          <div className="flex items-center gap-1">
+            <Users className="h-3 w-3 text-gray-500" />
+            <span>{course.max_students || 8}</span>
           </div>
-          <div className="flex items-center gap-2 text-sm">
-            <Award className="h-4 w-4 text-gray-500" />
+          <div className="flex items-center gap-1">
+            <Award className="h-3 w-3 text-gray-500" />
             <span>{course.instructor || 'TBD'}</span>
           </div>
         </div>
         
         <div className="flex justify-between items-center">
-          <span className="text-2xl font-bold text-nail-purple">{course.price_display || 'Contact for pricing'}</span>
-          <Button asChild className="bg-nail-purple hover:bg-nail-purple/90">
+          <span className="text-lg font-bold text-nail-purple">{course.price_display || 'Contact'}</span>
+          <Button asChild size="sm" className="bg-nail-purple hover:bg-nail-purple/90">
             <Link to={`/training/course/${course.id}`}>
-              Learn More <ChevronRight className="ml-1 h-4 w-4" />
+              Learn More <ChevronRight className="ml-1 h-3 w-3" />
             </Link>
           </Button>
         </div>
@@ -354,20 +367,38 @@ interface MediaCardProps {
 const MediaCard = ({ media, onVideoClick }: MediaCardProps) => {
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
-      <div className="relative h-48 overflow-hidden">
+      <div className="relative h-64 overflow-hidden">
         {media.type === 'image' ? (
           <img 
             src={media.url} 
             alt={media.title}
             className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+            style={{
+              filter: 'contrast(1.1) brightness(1.05) saturate(1.1)',
+              imageRendering: 'high-quality'
+            }}
+            loading="lazy"
           />
         ) : (
           <div className="relative w-full h-full bg-gray-900 flex items-center justify-center">
             <video 
               className="w-full h-full object-cover"
-              poster={media.url.replace('.mp4', '-poster.jpg')}
+              poster={media.url.replace(/\.(mp4|webm|ogg|avi|mov|wmv)$/, '-poster.jpg')}
+              preload="metadata"
+              crossOrigin="anonymous"
+              style={{
+                filter: 'contrast(1.1) brightness(1.05) saturate(1.1)'
+              }}
+              onError={(e) => {
+                console.error('Video preview error:', e);
+              }}
             >
               <source src={media.url} type="video/mp4" />
+              <source src={media.url} type="video/webm" />
+              <source src={media.url} type="video/ogg" />
+              <source src={media.url} type="video/avi" />
+              <source src={media.url} type="video/mov" />
+              <source src={media.url} type="video/wmv" />
             </video>
             <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
               <Button
@@ -383,9 +414,9 @@ const MediaCard = ({ media, onVideoClick }: MediaCardProps) => {
         )}
       </div>
       
-      <CardContent className="p-4">
-        <h3 className="font-semibold mb-1">{media.title}</h3>
-        <p className="text-sm text-gray-600">{media.description}</p>
+      <CardContent className="p-3">
+        <h3 className="font-semibold mb-1 text-sm">{media.title}</h3>
+        <p className="text-xs text-gray-600 line-clamp-2">{media.description}</p>
       </CardContent>
     </Card>
   );

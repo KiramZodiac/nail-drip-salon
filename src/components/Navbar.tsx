@@ -106,18 +106,31 @@ const Navbar = () => {
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              className="relative"
             >
-              <Button asChild className="bg-nail-purple hover:bg-nail-purple/90">
-                <NavLink to="/booking">Book Now</NavLink>
-              </Button>
-            </motion.div>
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Button asChild variant="outline" size="sm">
-                <NavLink to="/admin/login">Admin</NavLink>
-              </Button>
+              <NavLink 
+                to="/booking" 
+                className="inline-flex items-center justify-center space-x-2 bg-gradient-to-r from-nail-purple via-purple-600 to-nail-purple hover:from-purple-600 hover:via-nail-purple hover:to-purple-700 text-white font-semibold px-6 py-2.5 shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-white/20 hover:border-white/40 rounded-md cursor-pointer"
+                style={{
+                  boxShadow: '0 0 20px rgba(155, 135, 245, 0.4), 0 4px 15px rgba(0, 0, 0, 0.1)'
+                }}
+              >
+                <Calendar size={18} />
+                <span className="text-lg font-bold">Book Now</span>
+              </NavLink>
+              {/* Pulse ring effect */}
+              <motion.div
+                className="absolute inset-0 rounded-md border-2 border-nail-purple/50 pointer-events-none"
+                animate={{
+                  scale: [1, 1.1, 1],
+                  opacity: [0.5, 0, 0.5],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              />
             </motion.div>
           </div>
 
@@ -288,13 +301,32 @@ const Navbar = () => {
                     transition={{ delay: 0.4 }}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
+                    className="relative"
                   >
-                    <Button asChild className="bg-gradient-to-r from-nail-purple to-nail-purple/90 hover:from-nail-purple/90 hover:to-nail-purple/80 w-full py-3 text-white font-medium shadow-lg">
-                      <NavLink to="/booking" onClick={toggleMenu} className="flex items-center justify-center space-x-2">
-                        <Calendar size={18} />
-                        <span>Book Now</span>
-                      </NavLink>
-                    </Button>
+                    <NavLink 
+                      to="/booking" 
+                      onClick={toggleMenu}
+                      className="inline-flex items-center justify-center space-x-3 w-full py-4 text-white font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 border-2 border-white/20 hover:border-white/40 rounded-md cursor-pointer bg-gradient-to-r from-nail-purple via-purple-600 to-nail-purple hover:from-purple-600 hover:via-nail-purple hover:to-purple-700"
+                      style={{
+                        boxShadow: '0 0 25px rgba(155, 135, 245, 0.5), 0 8px 25px rgba(0, 0, 0, 0.15)'
+                      }}
+                    >
+                      <Calendar size={22} />
+                      <span className="text-xl font-bold">Book Now</span>
+                    </NavLink>
+                    {/* Pulse ring effect for mobile */}
+                    <motion.div
+                      className="absolute inset-0 rounded-md border-2 border-nail-purple/60 pointer-events-none"
+                      animate={{
+                        scale: [1, 1.05, 1],
+                        opacity: [0.6, 0, 0.6],
+                      }}
+                      transition={{
+                        duration: 2.5,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                      }}
+                    />
                   </motion.div>
                 </div>
               </div>
