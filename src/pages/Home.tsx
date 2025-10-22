@@ -146,7 +146,7 @@ const Home = () => {
               The Nail Drip
             </motion.h4>
 
-            <motion.h2 
+            <motion.h1 
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
@@ -155,7 +155,7 @@ const Home = () => {
             >
               The Ultimate Luxurious <br />
               Nail Salon Experience
-            </motion.h2>
+            </motion.h1>
 
             <motion.p 
               initial={{ opacity: 0, y: 20 }}
@@ -257,7 +257,7 @@ const Home = () => {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Popular Services</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Popular Nail Services</h2>
             <div className="w-24 h-1 bg-nail-purple mx-auto mb-4"></div>
             <p className="text-gray-600 max-w-xl mx-auto">
               Discover our most requested nail treatments and art designs that will leave your nails looking stunning.
@@ -339,7 +339,7 @@ const Home = () => {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">What Our Clients Say</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Client Testimonials & Reviews</h2>
             <div className="w-24 h-1 bg-nail-purple mx-auto mb-4"></div>
             <p className="text-gray-700 max-w-xl mx-auto">
               Hear from our wonderful clients about their experiences at Naildrip Nails.
@@ -413,7 +413,7 @@ const Home = () => {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready For Beautiful Nails?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Book Your Nail Appointment Today</h2>
             <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
               Book your appointment today and treat yourself to a luxurious nail experience at Naildrip Nails.
             </p>

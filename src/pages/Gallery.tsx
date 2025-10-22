@@ -21,6 +21,7 @@ const Gallery = () => {
         const { data, error } = await supabase
           .from('gallery')
           .select('*')
+          .eq('is_active', true)
           .order('display_order', { ascending: true });
 
         if (error) {
@@ -298,6 +299,7 @@ interface GalleryImage {
   category: string | null;
   tags: string[] | null;
   is_featured: boolean | null;
+  is_active: boolean | null;
   display_order: number | null;
 }
 

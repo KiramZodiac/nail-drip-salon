@@ -2,7 +2,9 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import AdminLayout from "./components/AdminLayout";
+import ProtectedRoute from "./components/ProtectedRoute";
 import ScrollToTop from "./components/ScrollToTop";
+import { AuthProvider } from "./contexts/AuthContext";
 import Home from "./pages/Home";
 import Services from "./pages/Services";
 import Training from "./pages/Training";
@@ -24,38 +26,40 @@ import ContactAdmin from "./pages/admin/ContactAdmin";
 import StaffAdmin from "./pages/admin/StaffAdmin";
 
 const App = () => (
-  <BrowserRouter
-    future={{
-      v7_startTransition: true,
-      v7_relativeSplatPath: true
-    }}
-  >
-    <ScrollToTop />
-    <Routes>
-      {/* Public routes */}
-      <Route path="/" element={<Layout><Home /></Layout>} />
-      <Route path="/services" element={<Layout><Services /></Layout>} />
-      <Route path="/training" element={<Layout><Training /></Layout>} />
-      <Route path="/gallery" element={<Layout><Gallery /></Layout>} />
-      <Route path="/about" element={<Layout><About /></Layout>} />
-      <Route path="/contact" element={<Layout><Contact /></Layout>} />
-      <Route path="/booking" element={<Layout><Booking /></Layout>} />
-      <Route path="/privacy-policy" element={<Layout><PrivacyPolicy /></Layout>} />
-      <Route path="/terms-conditions" element={<Layout><TermsConditions /></Layout>} />
-      
-      {/* Admin routes */}
-      <Route path="/admin/login" element={<Login />} />
-      <Route path="/admin" element={<AdminLayout><Dashboard /></AdminLayout>} />
-      <Route path="/admin/hero" element={<AdminLayout><HeroAdmin /></AdminLayout>} />
-      <Route path="/admin/services" element={<AdminLayout><ServicesAdmin /></AdminLayout>} />
-      <Route path="/admin/training" element={<AdminLayout><TrainingAdmin /></AdminLayout>} />
-      <Route path="/admin/gallery" element={<AdminLayout><GalleryAdmin /></AdminLayout>} />
-      <Route path="/admin/messages" element={<AdminLayout><ContactAdmin /></AdminLayout>} />
-      <Route path="/admin/staff" element={<AdminLayout><StaffAdmin /></AdminLayout>} />
-      
-      <Route path="*" element={<Layout><NotFound /></Layout>} />
-    </Routes>
-  </BrowserRouter>
+  <AuthProvider>
+    <BrowserRouter
+      future={{
+        v7_startTransition: true,
+        v7_relativeSplatPath: true
+      }}
+    >
+      <ScrollToTop />
+      <Routes>
+        {/* Public routes */}
+        <Route path="/" element={<Layout><Home /></Layout>} />
+        <Route path="/services" element={<Layout><Services /></Layout>} />
+        <Route path="/training" element={<Layout><Training /></Layout>} />
+        <Route path="/gallery" element={<Layout><Gallery /></Layout>} />
+        <Route path="/about" element={<Layout><About /></Layout>} />
+        <Route path="/contact" element={<Layout><Contact /></Layout>} />
+        <Route path="/booking" element={<Layout><Booking /></Layout>} />
+        <Route path="/privacy-policy" element={<Layout><PrivacyPolicy /></Layout>} />
+        <Route path="/terms-conditions" element={<Layout><TermsConditions /></Layout>} />
+        
+        {/* Admin routes */}
+        <Route path="/admin/login" element={<Login />} />
+        <Route path="/admin" element={<ProtectedRoute><AdminLayout><Dashboard /></AdminLayout></ProtectedRoute>} />
+        <Route path="/admin/hero" element={<ProtectedRoute><AdminLayout><HeroAdmin /></AdminLayout></ProtectedRoute>} />
+        <Route path="/admin/services" element={<ProtectedRoute><AdminLayout><ServicesAdmin /></AdminLayout></ProtectedRoute>} />
+        <Route path="/admin/training" element={<ProtectedRoute><AdminLayout><TrainingAdmin /></AdminLayout></ProtectedRoute>} />
+        <Route path="/admin/gallery" element={<ProtectedRoute><AdminLayout><GalleryAdmin /></AdminLayout></ProtectedRoute>} />
+        <Route path="/admin/messages" element={<ProtectedRoute><AdminLayout><ContactAdmin /></AdminLayout></ProtectedRoute>} />
+        <Route path="/admin/staff" element={<ProtectedRoute><AdminLayout><StaffAdmin /></AdminLayout></ProtectedRoute>} />
+        
+        <Route path="*" element={<Layout><NotFound /></Layout>} />
+      </Routes>
+    </BrowserRouter>
+  </AuthProvider>
 );
 
 export default App;

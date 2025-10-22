@@ -90,6 +90,24 @@ const Footer = () => {
               </Link>
             </div>
           </div>
+          
+          {/* Created by section */}
+          <div className="border-t border-gray-200 pt-4 mt-4">
+            <div className="text-center">
+              <p className="text-gray-400 text-xs">
+                Created by{' '}
+                <a 
+                  href="https://kiram.netlify.app/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-nail-purple hover:text-nail-gold transition-colors font-medium"
+                >
+                  Akram Mageye
+                </a>
+                {' '}• Software Developer
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </footer>

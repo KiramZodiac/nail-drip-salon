@@ -4,66 +4,66 @@ interface OptimizedImageProps {
   src: string;
   alt: string;
   className?: string;
-  loading?: 'lazy' | 'eager';
+  width?: number;
+  height?: number;
   priority?: boolean;
-  placeholder?: string;
-  onError?: () => void;
+  loading?: 'lazy' | 'eager';
+  decoding?: 'async' | 'sync' | 'auto';
+  sizes?: string;
   style?: React.CSSProperties;
+  onError?: () => void;
+  onLoad?: () => void;
 }
 
 const OptimizedImage = ({
   src,
   alt,
   className = '',
-  loading = 'lazy',
+  width,
+  height,
   priority = false,
-  placeholder = '/placeholder.svg',
-  onError,
+  loading = 'lazy',
+  decoding = 'async',
+  sizes,
   style,
-  ...props
+  onError,
+  onLoad
 }: OptimizedImageProps) => {
-  const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
-
-  const handleLoad = () => {
-    setImageLoaded(true);
-  };
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const handleError = () => {
     setImageError(true);
-    if (onError) onError();
+    onError?.();
   };
 
-  return (
-    <div className="relative overflow-hidden">
-      {/* Placeholder/Loading state */}
-      {!imageLoaded && !imageError && (
-        <div 
-          className={`bg-gray-200 animate-pulse ${className}`}
-          style={style}
-        >
-          <div className="w-full h-full flex items-center justify-center">
-            <div className="w-8 h-8 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin"></div>
-          </div>
-        </div>
-      )}
+  const handleLoad = () => {
+    setImageLoaded(true);
+    onLoad?.();
+  };
 
-      {/* Actual image */}
-      <img
-        src={imageError ? placeholder : src}
-        alt={alt}
-        className={`${className} ${imageLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}
-        loading={priority ? 'eager' : loading}
-        decoding="async"
-        fetchPriority={priority ? 'high' : 'auto'}
-        onLoad={handleLoad}
-        onError={handleError}
-        style={style}
-        {...props}
-      />
-    </div>
+  // Fallback to placeholder if image fails to load
+  const imageSrc = imageError ? '/placeholder.svg' : src;
+
+  return (
+    <img
+      src={imageSrc}
+      alt={alt}
+      className={`${className} ${!imageLoaded ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`}
+      width={width}
+      height={height}
+      loading={priority ? 'eager' : loading}
+      decoding={decoding}
+      sizes={sizes}
+      style={style}
+      onError={handleError}
+      onLoad={handleLoad}
+      // SEO attributes
+      itemProp="image"
+      role="img"
+      aria-label={alt}
+    />
   );
 };
 
 export default OptimizedImage;
-

@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Scissors, Clock, Users, Star } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import SEO from "@/components/SEO";
 
 interface Staff {
   id: string;
@@ -106,11 +107,30 @@ const About = () => {
 
   return (
     <div>
+      <SEO
+        title="About Nail Drip Salon - Your Premium Nail Care Destination"
+        description="Learn about Nail Drip Salon's story, values, and expert team. Founded in 2018, we provide luxury nail care with premium products, professional technicians, and exceptional service."
+        keywords="about nail salon, nail salon story, nail technicians, nail salon team, nail salon values, premium nail care, nail salon history"
+        canonical="https://naildrip.salon/about"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "AboutPage",
+          "name": "About Nail Drip Salon",
+          "description": "Learn about Nail Drip Salon's story, values, and expert team",
+          "mainEntity": {
+            "@type": "BeautySalon",
+            "name": "Nail Drip Salon",
+            "foundingDate": "2018",
+            "description": "Premium nail salon offering luxury manicures, pedicures, nail art, extensions, and professional nail technician training",
+            "url": "https://naildrip.salon"
+          }
+        }}
+      />
       {/* Hero Section */}
       <section className="bg-nail-lavender py-28">
         <div className="container mx-auto px-4">
           <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">About Nail Drip </h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">About Nail Drip Salon - Your Premium Nail Care Destination</h1>
             <p className="text-lg text-gray-700 max-w-2xl mx-auto">
               Discover the story behind our premium nail salon and the passionate team dedicated to your nail care.
             </p>
@@ -123,7 +143,7 @@ const About = () => {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-3xl font-bold mb-4">Our Story</h2>
+              <h2 className="text-3xl font-bold mb-4">The Nail Drip Salon Story</h2>
               <div className="w-20 h-1 bg-nail-purple mb-6"></div>
               <p className="text-gray-700 mb-4">
                 Founded in 2018, Nail Drip began with a simple mission: to provide exceptional nail care services in a luxurious yet welcoming environment. Our founder, Isabella Johnson, saw a need for a nail salon that prioritized both quality and client experience.
@@ -158,7 +178,7 @@ const About = () => {
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Our Values</h2>
+            <h2 className="text-3xl font-bold mb-4">Our Core Values & Commitment</h2>
             <div className="w-24 h-1 bg-nail-purple mx-auto mb-6"></div>
             <p className="text-gray-700 max-w-2xl mx-auto">
               At Nail Drip, our core values guide everything we do, from how we treat our clients to the quality of our services.
@@ -183,7 +203,7 @@ const About = () => {
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Meet Our Team</h2>
+            <h2 className="text-3xl font-bold mb-4">Meet Our Expert Nail Technicians</h2>
             <div className="w-24 h-1 bg-nail-purple mx-auto mb-6"></div>
             <p className="text-gray-700 max-w-2xl mx-auto">
               Our skilled team of nail technicians brings years of experience and a passion for nail artistry.
@@ -271,7 +291,7 @@ const About = () => {
               />
             </div>
             <div>
-              <h2 className="text-3xl font-bold mb-4">Premium Products</h2>
+              <h2 className="text-3xl font-bold mb-4">Premium Nail Products & Quality Assurance</h2>
               <div className="w-20 h-1 bg-nail-purple mb-6"></div>
               <p className="text-gray-700 mb-4">
                 At Nail Drip, we believe that exceptional nail services start with high-quality products. We carefully select our polishes, tools, and treatment products from trusted brands that share our commitment to quality and safety.
@@ -293,7 +313,7 @@ const About = () => {
       {/* Call to Action */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">Experience Nail Drip</h2>
+          <h2 className="text-3xl font-bold mb-4">Experience Nail Drip Salon Today</h2>
           <p className="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">
             Ready to experience our premium nail services? Book an appointment today and let our talented team take care of you.
           </p>

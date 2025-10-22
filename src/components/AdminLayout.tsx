@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { 
@@ -15,6 +15,7 @@ import {
   X,
   LogOut
 } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -23,6 +24,8 @@ interface AdminLayoutProps {
 const AdminLayout = ({ children }: AdminLayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { logout } = useAuth();
 
   const navigation = [
     { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
@@ -93,8 +96,8 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
             variant="outline"
             className="w-full justify-start"
             onClick={() => {
-              // Handle logout
-              window.location.href = '/';
+              logout();
+              navigate('/admin/login');
             }}
           >
             <LogOut className="mr-2 h-4 w-4" />

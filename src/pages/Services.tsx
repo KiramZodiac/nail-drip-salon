@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { supabase } from "@/lib/supabase";
+import SEO from "@/components/SEO";
 
 const Services = () => {
   const [activeCategory, setActiveCategory] = useState("all");
@@ -124,6 +125,63 @@ const Services = () => {
 
   return (
     <div>
+      <SEO
+        title="Professional Nail Services & Treatments"
+        description="Discover our complete range of professional nail services including manicures, pedicures, nail art, extensions, and repairs. Expert nail technicians, premium products, and exceptional care at Nail Drip Salon."
+        keywords="nail services, manicure, pedicure, nail art, nail extensions, gel nails, acrylic nails, nail repairs, professional nail care, nail technician services"
+        canonical="https://naildrip.salon/services"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "Service",
+          "name": "Professional Nail Services",
+          "description": "Complete range of professional nail services including manicures, pedicures, nail art, extensions, and repairs",
+          "provider": {
+            "@type": "BeautySalon",
+            "name": "Nail Drip Salon",
+            "url": "https://naildrip.salon"
+          },
+          "serviceType": "Nail Care Services",
+          "areaServed": "United States",
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Nail Services",
+            "itemListElement": [
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Manicure",
+                  "description": "Professional nail care and polish application"
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Pedicure",
+                  "description": "Luxurious foot care and nail treatment"
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Nail Art",
+                  "description": "Creative and artistic nail designs"
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Nail Extensions",
+                  "description": "Professional nail extensions and enhancements"
+                }
+              }
+            ]
+          }
+        }}
+      />
       {/* Hero Section */}
       <section className="bg-nail-pink py-28">
         <div className="container mx-auto px-4">
@@ -133,7 +191,7 @@ const Services = () => {
             transition={{ duration: 0.8 }}
             className="text-center"
           >
-            <h1 className="text-4xl md:text-5xl font-bold mb-7">Our Services</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-7">Professional Nail Services & Treatments</h1>
             <p className="text-lg text-gray-700 max-w-2xl mx-auto">
               Discover our complete range of nail treatments and services designed to pamper you and make your nails look stunning.
             </p>
@@ -230,7 +288,7 @@ const Services = () => {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl font-bold mb-4">Ready to Book Your Service?</h2>
+            <h2 className="text-3xl font-bold mb-4">Schedule Your Nail Service Appointment</h2>
             <p className="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">
               Schedule your appointment today and let our expert nail technicians take care of you.
             </p>

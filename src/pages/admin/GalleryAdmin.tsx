@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Edit, Trash2, Search, Image as ImageIcon, Star, Play } from "lucide-react";
+import { Plus, Edit, Trash2, Search, Image as ImageIcon, Star, Play, Eye, EyeOff } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { toast } from "@/components/ui/sonner";
 import FileUpload from "@/components/FileUpload";
@@ -23,6 +23,7 @@ interface GalleryImage {
   category: string | null;
   tags: string[] | null;
   is_featured: boolean | null;
+  is_active: boolean | null;
   display_order: number | null;
 }
 
@@ -42,6 +43,7 @@ const GalleryAdmin = () => {
     category: "",
     tags: [] as string[],
     is_featured: false,
+    is_active: true,
     display_order: 0
   });
 
@@ -108,6 +110,7 @@ const GalleryAdmin = () => {
       category: image.category || "",
       tags: image.tags || [],
       is_featured: image.is_featured || false,
+      is_active: image.is_active !== null ? image.is_active : true,
       display_order: image.display_order || 0
     });
     setIsDialogOpen(true);
@@ -129,6 +132,22 @@ const GalleryAdmin = () => {
     }
   };
 
+  const handleToggleActive = async (id: string, currentStatus: boolean) => {
+    try {
+      const { error } = await supabase
+        .from('gallery')
+        .update({ is_active: !currentStatus })
+        .eq('id', id);
+
+      if (error) throw error;
+      toast.success(`Image ${!currentStatus ? 'activated' : 'deactivated'} successfully`);
+      fetchImages();
+    } catch (error) {
+      console.error('Error toggling image status:', error);
+      toast.error("Failed to update image status");
+    }
+  };
+
   const resetForm = () => {
     setFormData({
       title: "",
@@ -139,6 +158,7 @@ const GalleryAdmin = () => {
       category: "",
       tags: [],
       is_featured: false,
+      is_active: true,
       display_order: 0
     });
   };
@@ -420,18 +440,32 @@ const GalleryAdmin = () => {
                 </div>
               </div>
 
-              {/* Featured Toggle */}
-              <div className="flex items-center space-x-2 p-3 border rounded-lg bg-gray-50">
-                <input
-                  type="checkbox"
-                  id="is_featured"
-                  checked={formData.is_featured}
-                  onChange={(e) => setFormData({ ...formData, is_featured: e.target.checked })}
-                  className="rounded border-gray-300"
-                />
-                <Label htmlFor="is_featured" className="text-sm font-medium">
-                  Featured Media
-                </Label>
+              {/* Featured and Active Toggles */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="flex items-center space-x-2 p-3 border rounded-lg bg-gray-50">
+                  <input
+                    type="checkbox"
+                    id="is_featured"
+                    checked={formData.is_featured}
+                    onChange={(e) => setFormData({ ...formData, is_featured: e.target.checked })}
+                    className="rounded border-gray-300"
+                  />
+                  <Label htmlFor="is_featured" className="text-sm font-medium">
+                    Featured Media
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2 p-3 border rounded-lg bg-gray-50">
+                  <input
+                    type="checkbox"
+                    id="is_active"
+                    checked={formData.is_active}
+                    onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
+                    className="rounded border-gray-300"
+                  />
+                  <Label htmlFor="is_active" className="text-sm font-medium">
+                    Visible to Users
+                  </Label>
+                </div>
               </div>
 
               {/* Form Actions */}
@@ -478,6 +512,15 @@ const GalleryAdmin = () => {
               <div className="flex justify-between items-start">
                 <CardTitle className="text-lg">{image.title}</CardTitle>
                 <div className="flex space-x-1">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleToggleActive(image.id, image.is_active || false)}
+                    title={image.is_active ? "Hide from users" : "Show to users"}
+                    className={image.is_active ? "text-green-600 hover:text-green-700" : "text-gray-400 hover:text-gray-600"}
+                  >
+                    {image.is_active ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+                  </Button>
                   <Button
                     variant="ghost"
                     size="sm"
@@ -533,6 +576,19 @@ const GalleryAdmin = () => {
                       Featured
                     </Badge>
                   )}
+                  <Badge variant={image.is_active ? "default" : "secondary"} className={image.is_active ? "bg-green-500" : "bg-gray-400"}>
+                    {image.is_active ? (
+                      <>
+                        <Eye className="mr-1 h-3 w-3" />
+                        Visible
+                      </>
+                    ) : (
+                      <>
+                        <EyeOff className="mr-1 h-3 w-3" />
+                        Hidden
+                      </>
+                    )}
+                  </Badge>
                 </div>
                 <p className="text-sm text-gray-600">{image.description}</p>
                 <div className="mt-2 relative">
