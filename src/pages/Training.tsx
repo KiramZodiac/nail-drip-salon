@@ -159,7 +159,9 @@ const Training = () => {
       <section className="relative h-[70vh] overflow-hidden">
         <div className="absolute inset-0 bg-black/40 z-10"></div>
         <img 
-          src="/training.jpeg" 
+          src="/training.jpeg"
+          loading="lazy"
+          decoding="async" 
           alt="Professional Nail Training"
           className="absolute inset-0 w-full h-full object-cover"
         />

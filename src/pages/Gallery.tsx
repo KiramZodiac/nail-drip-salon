@@ -145,7 +145,7 @@ const Gallery = () => {
           >
             <h1 className="text-4xl md:text-5xl font-bold mb-4">Our Nail Gallery</h1>
             <p className="text-lg text-gray-700 max-w-2xl mx-auto">
-              Browse our gallery of beautiful nail designs created by our talented nail artists at Nagaayi Nails.
+              Browse our gallery of beautiful nail designs created by our talented nail artists at Nail Drip Nails.
             </p>
           </motion.div>
         </div>

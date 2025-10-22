@@ -126,7 +126,7 @@ Please confirm my appointment. Thank you!`;
       const encodedMessage = encodeURIComponent(whatsappMessage);
       
       // Create WhatsApp URL
-      const whatsappUrl = `https://wa.me/256751214095?text=${encodedMessage}`;
+      const whatsappUrl = `https://wa.me/256758907256?text=${encodedMessage}`;
       
       // Open WhatsApp in a new tab/window
       window.open(whatsappUrl, '_blank');
@@ -412,8 +412,8 @@ Please confirm my appointment. Thank you!`;
                       If you prefer to book by phone or have any questions:
                     </p>
                     <p className="font-medium">
-                      <a href="tel:+1234567890" className="text-nail-purple hover:underline">
-                        (256) 751214095
+                      <a href="tel:+256758907256" className="text-nail-purple hover:underline">
+                        +256 758 907256
                       </a>
                     </p>
                   </div>

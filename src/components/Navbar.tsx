@@ -95,20 +95,20 @@ const Navbar = () => {
               {/* Simple Logo Icon */}
               <div className="relative flex">
                 <motion.div 
-                  className="bg-white p-2 rounded-full shadow-md border border-gray-100"
+                  className="bg-white p-1 rounded-full shadow-lg border border-gray-200"
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.3 }}
                 >
                   <img 
-                    src="/icon2.jpeg" 
+                    src="/nailpot.jpeg" 
                     alt="Nail Drip Icon" 
-                    className="h-12 w-12 object-cover"
+                    className="h-14 w-14 object-contain rounded-full"
                   />
                 </motion.div>
               </div>
               
               {/* Artistic Logo Text */}
-              <div className="flex flex-col sm:flex-row sm:items-center">
+              <div className="flex flex-col">
                 <div className="relative">
                   <h1 className="text-3xl sm:text-4xl font-black italic" style={{ 
                     fontFamily: "'Dancing Script', 'Brush Script MT', 'Lucida Handwriting', cursive",
@@ -122,7 +122,7 @@ const Navbar = () => {
                     </span>
                   </h1>
                 </div>
-                <span className="text-xs italic text-gray-600 sm:ml-3 hidden sm:block font-light">
+                <span className="text-xs italic text-gray-600 font-light mt-1 sm:mt-0 sm:ml-3 sm:inline-block">
                   Beauty at your fingertips
                 </span>
               </div>

@@ -141,8 +141,10 @@ const About = () => {
             <div className="relative">
               <img 
                 src="/extensions.jpeg" 
-                alt="Nagaayi Nails Salon" 
+                alt="Nail Drip Salon" 
                 className="rounded-lg shadow-lg object-cover h-full"
+                loading="lazy"
+                decoding="async"
               />
               <div className="absolute -bottom-8 -left-8 bg-white p-4 rounded-lg shadow-lg hidden md:block">
                 <p className="text-nail-purple font-semibold text-xl">Since 2018</p>
@@ -264,6 +266,8 @@ const About = () => {
                 src="pic.jpeg" 
                 alt="Premium Nail Products" 
                 className="w-full h-auto rounded-lg"
+                loading="lazy"
+                decoding="async"
               />
             </div>
             <div>

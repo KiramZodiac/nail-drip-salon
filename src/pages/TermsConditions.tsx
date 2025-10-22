@@ -16,14 +16,14 @@ const TermsConditions = () => {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold mb-4">1. Acceptance of Terms</h2>
               <p>
-                By accessing or using the Nagaayi Nails website and services, you agree to be bound by these Terms and Conditions. If you do not agree to these Terms and Conditions, please do not use our website or services.
+                By accessing or using the Nail Drip Nails website and services, you agree to be bound by these Terms and Conditions. If you do not agree to these Terms and Conditions, please do not use our website or services.
               </p>
             </section>
             
             <section className="mb-8">
               <h2 className="text-2xl font-semibold mb-4">2. Services</h2>
               <p className="mb-4">
-                Nagaayi Nails provides nail care and beauty services. The specific services offered may change from time to time, and we reserve the right to modify or discontinue any service without notice.
+                Nail Drip Nails provides nail care and beauty services. The specific services offered may change from time to time, and we reserve the right to modify or discontinue any service without notice.
               </p>
               <p>
                 All services are provided subject to availability and scheduling. We recommend booking appointments in advance to ensure availability.
@@ -92,14 +92,14 @@ const TermsConditions = () => {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold mb-4">7. Intellectual Property</h2>
               <p>
-                All content on our website, including but not limited to text, graphics, logos, images, and software, is the property of Nagaayi Nails and is protected by copyright and other intellectual property laws. You may not reproduce, distribute, display, or create derivative works from any content without our express written permission.
+                All content on our website, including but not limited to text, graphics, logos, images, and software, is the property of naildrip Nails and is protected by copyright and other intellectual property laws. You may not reproduce, distribute, display, or create derivative works from any content without our express written permission.
               </p>
             </section>
             
             <section className="mb-8">
               <h2 className="text-2xl font-semibold mb-4">8. Limitation of Liability</h2>
               <p>
-                To the maximum extent permitted by law, Nagaayi Nails shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly, or any loss of data, use, goodwill, or other intangible losses, resulting from your use of our services or website.
+                To the maximum extent permitted by law, naildrip Nails shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly, or any loss of data, use, goodwill, or other intangible losses, resulting from your use of our services or website.
               </p>
             </section>
             
@@ -123,10 +123,10 @@ const TermsConditions = () => {
                 If you have any questions about these Terms and Conditions, please contact us at:
               </p>
               <div className="mt-4">
-                <p className="font-semibold">Nagaayi Nails</p>
+                <p className="font-semibold">naildrip Nails</p>
                 <p>123 Beauty Street</p>
                 <p>Salon City, SC 12345</p>
-                <p>Email: <a href="mailto:info@nagaayinails.com" className="text-nail-purple hover:underline">info@nagaayinails.com</a></p>
+                <p>Email: <a href="mailto:info@naildripnails.com" className="text-nail-purple hover:underline">info@naildripnails.com</a></p>
                 <p>Phone: (123) 456-7890</p>
               </div>
             </section>

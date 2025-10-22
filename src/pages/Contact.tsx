@@ -83,7 +83,7 @@ Please get back to me soon. Thank you!`;
       const encodedMessage = encodeURIComponent(whatsappMessage);
       
       // Create WhatsApp URL
-      const whatsappUrl = `https://wa.me/256751214095?text=${encodedMessage}`;
+      const whatsappUrl = `https://wa.me/256758907256?text=${encodedMessage}`;
       
       // Open WhatsApp in a new tab/window
       window.open(whatsappUrl, '_blank');
@@ -129,9 +129,10 @@ Please get back to me soon. Thank you!`;
                 </div>
                 <h3 className="text-xl font-semibold mb-2">Visit Us</h3>
                 <p className="text-gray-600">
-                  Nail Drip Salon<br />
-                  Kampala, Uganda<br />
-                  East Africa
+                  Najanankumbi Stella<br />
+                  Entebbe Road<br />
+                  Opposite Daherz Pharmacy<br />
+                  Kampala, Uganda
                 </p>
                 <a 
                   href="https://www.google.com/maps/place/Nail+Drip+salon/@0.2770599,32.5653045,17z/data=!3m1!4b1!4m6!3m5!1s0x177dbdbc76de9fe7:0xcd24f38a09bd0a6f!8m2!3d0.2770599!4d32.5653045!16s%2Fg%2F11rkg4p3wm?entry=ttu&g_ep=EgoyMDI1MTAxNC4wIKXMDSoASAFQAw%3D%3D" 
@@ -150,10 +151,10 @@ Please get back to me soon. Thank you!`;
                   <Phone className="h-8 w-8 text-nail-purple" />
                 </div>
                 <h3 className="text-xl font-semibold mb-2">Call Us</h3>
-                <p className="text-gray-600 mb-2">Phone: (123) 456-7890</p>
-                <p className="text-gray-600">WhatsApp: (123) 456-7890</p>
+                <p className="text-gray-600 mb-2">Phone: +256 758 907256</p>
+                <p className="text-gray-600">WhatsApp: +256 758 907256</p>
                 <a 
-                  href="tel:+1234567890" 
+                  href="tel:+256758907256" 
                   className="text-nail-purple mt-4 hover:underline"
                 >
                   Call Now
@@ -167,10 +168,10 @@ Please get back to me soon. Thank you!`;
                   <Mail className="h-8 w-8 text-nail-purple" />
                 </div>
                 <h3 className="text-xl font-semibold mb-2">Email Us</h3>
-                <p className="text-gray-600 mb-2">General: info@nagaayinails.com</p>
-                <p className="text-gray-600">Bookings: bookings@nagaayinails.com</p>
+                <p className="text-gray-600 mb-2">General: info@naildripnails.com</p>
+                <p className="text-gray-600">Bookings: bookings@naildripnails.com</p>
                 <a 
-                  href="mailto:info@nagaayinails.com" 
+                  href="mailto:info@naildripnails.com" 
                   className="text-nail-purple mt-4 hover:underline"
                 >
                   Send Email
@@ -190,16 +191,8 @@ Please get back to me soon. Thank you!`;
                     <h3 className="text-xl font-semibold mb-4">Business Hours</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <p className="font-medium">Monday - Friday</p>
-                        <p className="text-gray-600">9:00 AM - 8:00 PM</p>
-                      </div>
-                      <div>
-                        <p className="font-medium">Saturday</p>
-                        <p className="text-gray-600">9:00 AM - 6:00 PM</p>
-                      </div>
-                      <div>
-                        <p className="font-medium">Sunday</p>
-                        <p className="text-gray-600">10:00 AM - 4:00 PM</p>
+                        <p className="font-medium">Monday - Sunday</p>
+                        <p className="text-gray-600">Open until 11:00 PM</p>
                       </div>
                     </div>
                   </div>

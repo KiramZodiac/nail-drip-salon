@@ -16,7 +16,7 @@ const PrivacyPolicy = () => {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold mb-4">1. Introduction</h2>
               <p className="mb-4">
-                Nagaayi Nails ("we," "our," or "us") is committed to protecting the privacy of our clients and visitors to our website. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or use our services.
+                Nail Drip Nails ("we," "our," or "us") is committed to protecting the privacy of our clients and visitors to our website. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or use our services.
               </p>
               <p>
                 Please read this Privacy Policy carefully. By accessing or using our website or services, you acknowledge that you have read, understood, and agree to be bound by this Privacy Policy.
@@ -119,10 +119,10 @@ const PrivacyPolicy = () => {
                 If you have questions or concerns about this Privacy Policy or our privacy practices, please contact us at:
               </p>
               <div className="mt-4">
-                <p className="font-semibold">Nagaayi Nails</p>
+                <p className="font-semibold">Naildrip Nails</p>
                 <p>123 Beauty Street</p>
                 <p>Salon City, SC 12345</p>
-                <p>Email: <a href="mailto:privacy@nagaayinails.com" className="text-nail-purple hover:underline">privacy@nagaayinails.com</a></p>
+                <p>Email: <a href="mailto:privacy@naildripnails.com" className="text-nail-purple hover:underline">privacy@naildripnails.com</a></p>
                 <p>Phone: (123) 456-7890</p>
               </div>
             </section>

@@ -58,17 +58,17 @@ const Footer = () => {
             <div className="space-y-3">
               <div className="flex items-start">
                 <MapPin size={18} className="text-nail-purple mr-2 mt-1" />
-                <span className="text-gray-600">123 Beauty Street, Salon City, SC 12345</span>
+                <span className="text-gray-600">Najanankumbi Stella, Entebbe Road<br />Opposite Daherz Pharmacy, Kampala, Uganda</span>
               </div>
               <div className="flex items-center">
                 <Phone size={18} className="text-nail-purple mr-2" />
-                <a href="tel:+256751214095" className="text-gray-600 hover:text-nail-purple transition-colors">
-                  (123) 751214095
+                <a href="tel:+256758907256" className="text-gray-600 hover:text-nail-purple transition-colors">
+                  +256 758 907256
                 </a>
               </div>
               <div className="flex items-center">
                 <Mail size={18} className="text-nail-purple mr-2" />
-                <a href="mailto:info@nagaayinails.com" className="text-gray-600 hover:text-nail-purple transition-colors">
+                <a href="mailto:info@naildripnails.com" className="text-gray-600 hover:text-nail-purple transition-colors">
                   info@naildrip.com
                 </a>
               </div>

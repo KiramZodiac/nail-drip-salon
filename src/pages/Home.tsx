@@ -122,6 +122,9 @@ const Home = () => {
               src="bg.jpeg" // Using existing image from public folder
               alt="Nail polish splash"
               className="w-[500px] h-[500px] object-cover rounded-lg drop-shadow-2xl animate"
+              loading="lazy"
+              decoding="async"
+              fetchPriority="high"
             />
           </motion.div>
 
@@ -227,6 +230,8 @@ const Home = () => {
                   src={item.image} 
                   alt={item.label}
                   className="w-full h-full object-cover scale-110"
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
               <div className="mt-6 text-center">
@@ -337,7 +342,7 @@ const Home = () => {
             <h2 className="text-3xl md:text-4xl font-bold mb-4">What Our Clients Say</h2>
             <div className="w-24 h-1 bg-nail-purple mx-auto mb-4"></div>
             <p className="text-gray-700 max-w-xl mx-auto">
-              Hear from our wonderful clients about their experiences at Nagaayi Nails.
+              Hear from our wonderful clients about their experiences at Naildrip Nails.
             </p>
           </motion.div>
 
@@ -410,7 +415,7 @@ const Home = () => {
           >
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready For Beautiful Nails?</h2>
             <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-              Book your appointment today and treat yourself to a luxurious nail experience at Nagaayi Nails.
+              Book your appointment today and treat yourself to a luxurious nail experience at Naildrip Nails.
             </p>
             <motion.div
               whileHover={{ scale: 1.05 }}
