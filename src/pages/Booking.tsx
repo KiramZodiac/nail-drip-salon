@@ -37,7 +37,6 @@ import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters" }),
-  email: z.string().email({ message: "Please enter a valid email address" }),
   phone: z.string().min(10, { message: "Please enter a valid phone number" }),
   service: z.string().min(1, { message: "Please select a service" }),
   date: z.date({ required_error: "Please select a date" }),
@@ -84,7 +83,6 @@ const Booking = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      email: "",
       phone: "",
       service: preselectedServiceId || "",
       notes: "",
@@ -103,28 +101,49 @@ const Booking = () => {
   }, [preselectedServiceId, form]);
   
   const onSubmit = async (formData) => {
-    setIsSubmitting(true)
+    setIsSubmitting(true);
+    
     try {
-      const response = await fetch('https://nails-website.onrender.com/send-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+      // Get the selected service details
+      const selectedService = services.find(service => service.id === formData.service);
+      
+      // Format the date
+      const formattedDate = format(formData.date, "EEEE, MMMM do, yyyy");
+      
+      // Create WhatsApp message
+      const whatsappMessage = `Hello! I would like to book an appointment:
+
+👤 *Name:* ${formData.name}
+📞 *Phone:* ${formData.phone}
+💅 *Service:* ${selectedService?.name} - $${selectedService?.price}
+📅 *Date:* ${formattedDate}
+🕐 *Time:* ${formData.time}
+${formData.notes ? `📝 *Notes:* ${formData.notes}` : ''}
+
+Please confirm my appointment. Thank you!`;
+
+      // Encode the message for URL
+      const encodedMessage = encodeURIComponent(whatsappMessage);
+      
+      // Create WhatsApp URL
+      const whatsappUrl = `https://wa.me/256751214095?text=${encodedMessage}`;
+      
+      // Open WhatsApp in a new tab/window
+      window.open(whatsappUrl, '_blank');
+      
+      // Show success message
+      toast.success('Opening WhatsApp...', {
+        description: "Your booking details have been prepared. Please send the message to confirm your appointment."
       });
-  
-       const data = await response.json();
-      if (response.ok) {
-        toast('Appointment request sent!',{description:"Appointment created,we shall confirm to you shortly."});
-        form.reset()
-       
-      } else {
-        alert('Failed to send. Try again later.');
-       
-      }
+      
+      // Reset the form
+      form.reset();
+      
     } catch (error) {
-      console.error('Error submitting form:', error);
-      alert('Server error. Please try again.');
-    } finally{
-      setIsSubmitting(false)
+      console.error('Error preparing WhatsApp message:', error);
+      toast.error('Failed to prepare booking message. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
   
@@ -161,7 +180,11 @@ const Booking = () => {
             <div className="md:col-span-2">
               <Card>
                 <CardContent className="p-8">
-                  <h2 className="text-2xl font-bold mb-6">Request an Appointment</h2>
+                  <h2 className="text-2xl font-bold mb-6">Book via WhatsApp</h2>
+                  <p className="text-gray-600 mb-6">
+                    Fill out the form below and we'll open WhatsApp with your booking details ready to send. 
+                    Simply tap send to confirm your appointment!
+                  </p>
                   
                   {selectedService && (
                     <div className="mb-6 p-4 bg-nail-pink/20 border border-nail-purple/20 rounded-lg">
@@ -185,35 +208,19 @@ const Booking = () => {
 
                   <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <FormField
-                          control={form.control}
-                          name="name"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Full Name</FormLabel>
-                              <FormControl>
-                                <Input placeholder="Your name" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-
-                        <FormField
-                          control={form.control}
-                          name="email"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Email</FormLabel>
-                              <FormControl>
-                                <Input placeholder="Your email" type="email" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
+                      <FormField
+                        control={form.control}
+                        name="name"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Full Name</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Your name" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
                       <FormField
                         control={form.control}
@@ -357,7 +364,7 @@ const Booking = () => {
                           className="w-full bg-nail-purple hover:bg-nail-purple/90"
                           disabled={isSubmitting}
                         >
-                          {isSubmitting ? "Submitting..." : "Request Appointment"}
+                          {isSubmitting ? "Preparing..." : "Book via WhatsApp"}
                         </Button>
                       </div>
                     </form>

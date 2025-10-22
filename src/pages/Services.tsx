@@ -238,9 +238,9 @@ const Services = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Button asChild size="lg" className="bg-nail-purple hover:bg-nail-purple/90">
-                <Link to="/booking">Book an Appointment</Link>
-              </Button>
+              <Link to="/booking" className="inline-flex items-center justify-center space-x-2 bg-nail-purple hover:bg-purple-700 text-white font-medium px-6 py-3 rounded-full transition-colors duration-200 shadow-sm hover:shadow-md">
+                Book an Appointment
+              </Link>
             </motion.div>
           </motion.div>
         </div>
@@ -334,9 +334,9 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Button asChild variant="outline" className="border-nail-purple text-nail-purple hover:bg-nail-purple/10">
-                <Link to={`/booking?serviceId=${service.id}`}>Book Now</Link>
-              </Button>
+              <Link to={`/booking?serviceId=${service.id}`} className="inline-flex items-center justify-center space-x-2 border border-nail-purple text-nail-purple hover:bg-nail-purple/10 font-medium px-4 py-2 rounded-full transition-colors duration-200">
+                Book Now
+              </Link>
             </motion.div>
           </div>
         </CardContent>

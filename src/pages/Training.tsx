@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -42,6 +42,7 @@ const Training = () => {
   const [media, setMedia] = useState<TrainingMedia[]>([]);
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
   const [activeMediaCategory, setActiveMediaCategory] = useState<string>('all');
+  const tabsListRef = useRef<HTMLDivElement>(null);
 
   // Fetch data from database
   useEffect(() => {
@@ -80,6 +81,65 @@ const Training = () => {
     fetchData();
   }, []);
 
+  // Function to scroll to make the active tab visible
+  const scrollToActiveTab = (activeTab: string) => {
+    if (!tabsListRef.current) return;
+    
+    const container = tabsListRef.current;
+    
+    // For the first tab (all), ensure it's fully visible from the start
+    if (activeTab === "all") {
+      container.scrollLeft = 0;
+      return;
+    }
+    
+    // Try multiple selectors to find the active tab
+    let activeTabElement = container.querySelector(`button[value="${activeTab}"]`) as HTMLElement;
+    
+    if (!activeTabElement) {
+      // Fallback: look for button with data-state="active"
+      activeTabElement = container.querySelector(`button[data-state="active"]`) as HTMLElement;
+    }
+    
+    if (!activeTabElement) {
+      // Another fallback: look for any button that contains the tab text
+      const buttons = container.querySelectorAll('button');
+      activeTabElement = Array.from(buttons).find(btn => 
+        btn.textContent?.toLowerCase().includes(activeTab.toLowerCase())
+      ) as HTMLElement;
+    }
+    
+    if (activeTabElement) {
+      // Use scrollIntoView for more reliable scrolling
+      activeTabElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center'
+      });
+    }
+  };
+
+  // Handle tab change with auto-scroll
+  const handleTabChange = (value: string) => {
+    setActiveMediaCategory(value);
+    // Use setTimeout to ensure the tab is rendered before scrolling
+    setTimeout(() => scrollToActiveTab(value), 200);
+  };
+
+  // Scroll to active tab on mount
+  useEffect(() => {
+    if (activeMediaCategory) {
+      setTimeout(() => scrollToActiveTab(activeMediaCategory), 300);
+    }
+  }, [activeMediaCategory]);
+
+  // Ensure first tab is visible on mount
+  useEffect(() => {
+    if (tabsListRef.current) {
+      tabsListRef.current.scrollLeft = 0;
+    }
+  }, []);
+
   const filteredMedia = activeMediaCategory === 'all' 
     ? media 
     : media.filter(item => item.category === activeMediaCategory);
@@ -112,14 +172,14 @@ const Training = () => {
               Master the art of nail care and design with our comprehensive training programs
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-nail-purple hover:bg-nail-purple/90">
+              <Button size="lg" className="bg-nail-purple hover:bg-nail-purple/90" onClick={() => { document.getElementById('training-gallery')?.scrollIntoView({ behavior: 'smooth' }); }}>
                 <Play className="mr-2 h-5 w-5" />
-                Watch Course Preview
+                See Student Work
               </Button>
               <Button 
                 size="lg" 
                 variant="outline" 
-                className="border-white text-white hover:bg-white/10"
+                className="border-white text-white hover:bg-white/20 hover:text-white bg-white/10 backdrop-blur-sm"
                 onClick={() => {
                   document.getElementById('training-programs')?.scrollIntoView({ 
                     behavior: 'smooth' 
@@ -152,7 +212,7 @@ const Training = () => {
       </section>
 
       {/* Media Gallery Section */}
-      <section className="py-16">
+      <section id="training-gallery" className="py-16">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold mb-4">Training Gallery</h2>
@@ -161,28 +221,82 @@ const Training = () => {
             </p>
           </div>
 
-          <Tabs defaultValue="all" className="w-full" onValueChange={setActiveMediaCategory}>
-            <div className="flex justify-center mb-8">
-              <TabsList className="bg-gray-100">
-                <TabsTrigger value="all" className="data-[state=active]:bg-nail-purple data-[state=active]:text-white">
-                  All Media
-                </TabsTrigger>
-                <TabsTrigger value="student-work" className="data-[state=active]:bg-nail-purple data-[state=active]:text-white">
-                  Student Work
-                </TabsTrigger>
-                <TabsTrigger value="techniques" className="data-[state=active]:bg-nail-purple data-[state=active]:text-white">
-                  Techniques
-                </TabsTrigger>
-                <TabsTrigger value="classroom" className="data-[state=active]:bg-nail-purple data-[state=active]:text-white">
-                  Classroom
-                </TabsTrigger>
-                <TabsTrigger value="facility" className="data-[state=active]:bg-nail-purple data-[state=active]:text-white">
-                  Facility
-                </TabsTrigger>
+          <Tabs defaultValue="all" className="w-full" onValueChange={handleTabChange}>
+            <div className="w-full mb-8">
+              <TabsList ref={tabsListRef} className="bg-gray-100 w-full overflow-x-auto scrollbar-hide !p-0 justify-start sm:justify-center">
+                <div className="flex min-w-max gap-1 p-1 pl-4 pr-4 sm:pl-1 sm:pr-1">
+                  <TabsTrigger 
+                    value="all" 
+                    className="data-[state=active]:bg-nail-purple data-[state=active]:text-white whitespace-nowrap px-2 sm:px-3 py-2 text-xs sm:text-sm flex-shrink-0 ml-1 sm:ml-0"
+                    onClick={() => setTimeout(() => scrollToActiveTab("all"), 100)}
+                  >
+                    All Media
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="student-work" 
+                    className="data-[state=active]:bg-nail-purple data-[state=active]:text-white whitespace-nowrap px-2 sm:px-3 py-2 text-xs sm:text-sm flex-shrink-0"
+                    onClick={() => setTimeout(() => scrollToActiveTab("student-work"), 100)}
+                  >
+                    Student Work
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="techniques" 
+                    className="data-[state=active]:bg-nail-purple data-[state=active]:text-white whitespace-nowrap px-2 sm:px-3 py-2 text-xs sm:text-sm flex-shrink-0"
+                    onClick={() => setTimeout(() => scrollToActiveTab("techniques"), 100)}
+                  >
+                    Techniques
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="classroom" 
+                    className="data-[state=active]:bg-nail-purple data-[state=active]:text-white whitespace-nowrap px-2 sm:px-3 py-2 text-xs sm:text-sm flex-shrink-0"
+                    onClick={() => setTimeout(() => scrollToActiveTab("classroom"), 100)}
+                  >
+                    Classroom
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="facility" 
+                    className="data-[state=active]:bg-nail-purple data-[state=active]:text-white whitespace-nowrap px-2 sm:px-3 py-2 text-xs sm:text-sm flex-shrink-0"
+                    onClick={() => setTimeout(() => scrollToActiveTab("facility"), 100)}
+                  >
+                    Facility
+                  </TabsTrigger>
+                </div>
               </TabsList>
             </div>
 
-            <TabsContent value={activeMediaCategory} className="mt-0">
+            <TabsContent value="all" className="mt-0">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {filteredMedia.map((item) => (
+                  <MediaCard key={item.id} media={item} onVideoClick={setSelectedVideo} />
+                ))}
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="student-work" className="mt-0">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {filteredMedia.map((item) => (
+                  <MediaCard key={item.id} media={item} onVideoClick={setSelectedVideo} />
+                ))}
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="techniques" className="mt-0">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {filteredMedia.map((item) => (
+                  <MediaCard key={item.id} media={item} onVideoClick={setSelectedVideo} />
+                ))}
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="classroom" className="mt-0">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {filteredMedia.map((item) => (
+                  <MediaCard key={item.id} media={item} onVideoClick={setSelectedVideo} />
+                ))}
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="facility" className="mt-0">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {filteredMedia.map((item) => (
                   <MediaCard key={item.id} media={item} onVideoClick={setSelectedVideo} />
@@ -245,7 +359,7 @@ const Training = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild size="lg" className="bg-nail-purple hover:bg-nail-purple/90">
-              <Link to="/training/enroll">Enroll Now</Link>
+              <Link to="/contact">Enroll Now</Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="border-nail-purple text-nail-purple hover:bg-nail-purple/10">
               <Link to="/contact">Ask Questions</Link>
@@ -267,7 +381,7 @@ const Training = () => {
                 crossOrigin="anonymous"
                 onError={(e) => {
                   console.error('Video playback error:', e);
-                  toast.error("Unable to play this video format");
+                  console.error("Unable to play this video format");
                 }}
               >
                 <source src={selectedVideo} type="video/mp4" />
@@ -301,7 +415,7 @@ const CourseCard = ({ course, onVideoClick }: CourseCardProps) => {
           className="w-full h-full object-cover"
           style={{
             filter: 'contrast(1.1) brightness(1.05) saturate(1.1)',
-            imageRendering: 'high-quality'
+            imageRendering: 'auto'
           }}
           loading="lazy"
         />
@@ -373,10 +487,10 @@ const MediaCard = ({ media, onVideoClick }: MediaCardProps) => {
             src={media.url} 
             alt={media.title}
             className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-            style={{
-              filter: 'contrast(1.1) brightness(1.05) saturate(1.1)',
-              imageRendering: 'high-quality'
-            }}
+              style={{
+                filter: 'contrast(1.1) brightness(1.05) saturate(1.1)',
+                imageRendering: 'auto'
+              }}
             loading="lazy"
           />
         ) : (

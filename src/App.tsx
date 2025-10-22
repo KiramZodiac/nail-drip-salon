@@ -2,6 +2,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import AdminLayout from "./components/AdminLayout";
+import ScrollToTop from "./components/ScrollToTop";
 import Home from "./pages/Home";
 import Services from "./pages/Services";
 import Training from "./pages/Training";
@@ -29,6 +30,7 @@ const App = () => (
       v7_relativeSplatPath: true
     }}
   >
+    <ScrollToTop />
     <Routes>
       {/* Public routes */}
       <Route path="/" element={<Layout><Home /></Layout>} />

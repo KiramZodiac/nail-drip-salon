@@ -237,9 +237,9 @@ const Gallery = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Button asChild size="lg" className="bg-nail-purple hover:bg-nail-purple/90">
-                <Link to="/booking">Book an Appointment</Link>
-              </Button>
+              <Link to="/booking" className="inline-flex items-center justify-center space-x-2 bg-nail-purple hover:bg-purple-700 text-white font-medium px-6 py-3 rounded-full transition-colors duration-200 shadow-sm hover:shadow-md">
+                Book an Appointment
+              </Link>
             </motion.div>
           </motion.div>
         </div>

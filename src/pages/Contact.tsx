@@ -46,6 +46,7 @@ const Contact = () => {
     setIsSubmitting(true);
     
     try {
+      // Save to database
       const { error } = await supabase
         .from('contact_messages')
         .insert([
@@ -62,10 +63,39 @@ const Contact = () => {
       if (error) {
         console.error('Error saving message:', error);
         toast.error("Failed to send message. Please try again.");
-      } else {
-        toast.success("Message sent successfully! We'll get back to you soon.");
-        form.reset();
+        return;
       }
+
+      // Create WhatsApp message
+      const whatsappMessage = `Hello! I have a message for you:
+
+👤 *Name:* ${data.name}
+📧 *Email:* ${data.email}
+📞 *Phone:* ${data.phone}
+📝 *Subject:* ${data.subject}
+
+💬 *Message:*
+${data.message}
+
+Please get back to me soon. Thank you!`;
+
+      // Encode the message for URL
+      const encodedMessage = encodeURIComponent(whatsappMessage);
+      
+      // Create WhatsApp URL
+      const whatsappUrl = `https://wa.me/256751214095?text=${encodedMessage}`;
+      
+      // Open WhatsApp in a new tab/window
+      window.open(whatsappUrl, '_blank');
+      
+      // Show success message
+      toast.success("Message sent successfully!", {
+        description: "Your message has been saved and WhatsApp is opening for you to send it directly."
+      });
+      
+      // Reset the form
+      form.reset();
+      
     } catch (error) {
       console.error('Error saving message:', error);
       toast.error("Failed to send message. Please try again.");
@@ -99,12 +129,12 @@ const Contact = () => {
                 </div>
                 <h3 className="text-xl font-semibold mb-2">Visit Us</h3>
                 <p className="text-gray-600">
-                  123 Beauty Street<br />
-                  Salon City, SC 12345<br />
-                  United States
+                  Nail Drip Salon<br />
+                  Kampala, Uganda<br />
+                  East Africa
                 </p>
                 <a 
-                  href="https://maps.google.com" 
+                  href="https://www.google.com/maps/place/Nail+Drip+salon/@0.2770599,32.5653045,17z/data=!3m1!4b1!4m6!3m5!1s0x177dbdbc76de9fe7:0xcd24f38a09bd0a6f!8m2!3d0.2770599!4d32.5653045!16s%2Fg%2F11rkg4p3wm?entry=ttu&g_ep=EgoyMDI1MTAxNC4wIKXMDSoASAFQAw%3D%3D" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="text-nail-purple mt-4 hover:underline"
@@ -187,7 +217,7 @@ const Contact = () => {
             <h2 className="text-3xl font-bold mb-4">Send Us a Message</h2>
             <div className="w-24 h-1 bg-nail-purple mx-auto mb-6"></div>
             <p className="text-gray-700 max-w-2xl mx-auto">
-              Have a question or want to book an appointment? Fill out the form below and we'll get back to you as soon as possible.
+              Have a question or want to book an appointment? Fill out the form below and we'll save your message and open WhatsApp for you to send it directly.
             </p>
           </div>
 
@@ -280,7 +310,7 @@ const Contact = () => {
                         className="bg-nail-purple hover:bg-nail-purple/90 w-full md:w-auto"
                         disabled={isSubmitting}
                       >
-                        {isSubmitting ? "Sending..." : "Send Message"}
+                        {isSubmitting ? "Sending..." : "Send Message & WhatsApp"}
                       </Button>
                     </div>
                   </form>
@@ -295,9 +325,9 @@ const Contact = () => {
       <section className="py-0">
         <div className="relative h-[500px] w-full overflow-hidden">
           <iframe 
-            title="Nagaayi Nails Location"
+            title="Nail Drip Salon Location"
             className="w-full h-full border-0"
-            src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d3989.7552257428842!2d32.55391117572888!3d0.32222389204520135!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1sNakulabye%20round!5e0!3m2!1sen!2sug!4v1746215095425!5m2!1sen!2sug"
+            src="https://maps.google.com/maps?q=0.2770599,32.5653045&hl=en&z=17&output=embed"
             loading="lazy"
             allowFullScreen
             referrerPolicy="no-referrer-when-downgrade"

@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
 import { Plus, Edit, Trash2, Search } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { toast } from "@/components/ui/sonner";
@@ -125,6 +126,22 @@ const ServicesAdmin = () => {
     } catch (error) {
       console.error('Error deleting service:', error);
       toast.error("Failed to delete service");
+    }
+  };
+
+  const handleToggleActive = async (id: string, currentStatus: boolean) => {
+    try {
+      const { error } = await supabase
+        .from('services')
+        .update({ is_active: !currentStatus })
+        .eq('id', id);
+
+      if (error) throw error;
+      toast.success(`Service ${!currentStatus ? 'activated' : 'deactivated'} successfully`);
+      fetchServices();
+    } catch (error) {
+      console.error('Error toggling service status:', error);
+      toast.error("Failed to update service status");
     }
   };
 
@@ -310,12 +327,11 @@ const ServicesAdmin = () => {
 
               {/* Active Toggle */}
               <div className="flex items-center space-x-2 p-3 border rounded-lg bg-gray-50">
-                <input
-                  type="checkbox"
+                <Switch
                   id="is_active"
                   checked={formData.is_active}
-                  onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
-                  className="rounded border-gray-300"
+                  onCheckedChange={(checked) => setFormData({ ...formData, is_active: checked })}
+                  className="data-[state=checked]:bg-nail-purple"
                 />
                 <Label htmlFor="is_active" className="text-sm font-medium">
                   Service is Active
@@ -365,35 +381,47 @@ const ServicesAdmin = () => {
             <CardHeader>
               <div className="flex justify-between items-start">
                 <CardTitle className="text-lg">{service.name}</CardTitle>
-                <div className="flex space-x-1">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => handleEdit(service)}
-                  >
-                    <Edit className="h-4 w-4" />
-                  </Button>
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button variant="ghost" size="sm">
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>Delete Service</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          Are you sure you want to delete "{service.name}"? This action cannot be undone.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction onClick={() => handleDelete(service.id)}>
-                          Delete
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
+                <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      checked={service.is_active || false}
+                      onCheckedChange={() => handleToggleActive(service.id, service.is_active || false)}
+                      className="data-[state=checked]:bg-nail-purple"
+                    />
+                    <span className="text-xs text-gray-500">
+                      {service.is_active ? 'Visible' : 'Hidden'}
+                    </span>
+                  </div>
+                  <div className="flex space-x-1">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleEdit(service)}
+                    >
+                      <Edit className="h-4 w-4" />
+                    </Button>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button variant="ghost" size="sm">
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Delete Service</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Are you sure you want to delete "{service.name}"? This action cannot be undone.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction onClick={() => handleDelete(service.id)}>
+                            Delete
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </div>
                 </div>
               </div>
             </CardHeader>

@@ -5,11 +5,47 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Sparkles, Star, Heart, Shield } from "lucide-react";
 import Hero from "@/components/Hero";
+import { supabase } from "@/lib/supabase";
+
+interface Service {
+  id: string;
+  name: string;
+  description: string | null;
+  category: string;
+  duration_minutes: number;
+  price: number;
+  is_active: boolean | null;
+  image_url: string | null;
+  display_order: number | null;
+}
 
 const Home = () => {
   const [isTestimonialHovered, setIsTestimonialHovered] = useState<number | null>(null);
   const [technicianCount, setTechnicianCount] = useState(0);
   const [polishCount, setPolishCount] = useState(0);
+  const [services, setServices] = useState<Service[]>([]);
+  const [servicesLoading, setServicesLoading] = useState(true);
+
+  // Fetch services from database
+  const fetchServices = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('services')
+        .select('*')
+        .eq('is_active', true)
+        .order('display_order', { ascending: true })
+        .limit(3); // Only show top 3 services for popular services section
+
+      if (error) throw error;
+      setServices(data || []);
+    } catch (error) {
+      console.error('Error fetching services:', error);
+      // Fallback to empty array if there's an error
+      setServices([]);
+    } finally {
+      setServicesLoading(false);
+    }
+  };
 
   // Counting animation effect
   useEffect(() => {
@@ -45,6 +81,11 @@ const Home = () => {
     };
   }, []);
 
+  // Fetch services on component mount
+  useEffect(() => {
+    fetchServices();
+  }, []);
+
   const testimonials = [
     {
       id: 1,
@@ -67,7 +108,7 @@ const Home = () => {
       <Hero />
 
       {/* The Nail Boutique Section */}
-      <section className="relative py-52 bg-white/50 overflow-hidden">
+      <section className="relative py-16 md:py-52 bg-white/50 overflow-hidden">
         <div className="container mx-auto px-6 lg:px-20 grid md:grid-cols-2 gap-12 items-center">
           {/* Left: Image */}
           <motion.div 
@@ -147,7 +188,7 @@ const Home = () => {
         </div>
 
         {/* Service Images */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-0 mt-20 px-6 lg:px-20">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-0 mt-8 md:mt-20 px-6 lg:px-20">
           {[
             { 
               image: "manicure.jpeg", 
@@ -202,7 +243,7 @@ const Home = () => {
       </section>
 
       {/* Popular Services Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="pt-12 pb-20 md:py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
@@ -218,82 +259,56 @@ const Home = () => {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              viewport={{ once: true }}
-              whileHover={{ y: -5 }}
-              className="service-card bg-white rounded-lg overflow-hidden"
-            >
-              <img 
-                src="gel.jpeg" 
-                alt="Gel Manicure" 
-                className="w-full h-60 object-cover transition-transform duration-300"
-              />
-              <div className="p-6">
-                <h3 className="text-xl font-semibold mb-2">Gel Manicure</h3>
-                <p className="text-gray-600 mb-4">Long-lasting gel polish with a perfect shine that stays chip-free for weeks.</p>
-                <div className="flex justify-between items-center">
-                  <span className="text-nail-purple font-semibold">$35</span>
-                  <Button asChild variant="outline" className="border-nail-purple text-nail-purple hover:bg-nail-purple/10">
-                    <Link to="/services">Learn More</Link>
-                  </Button>
+          {servicesLoading ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="service-card bg-white rounded-lg overflow-hidden animate-pulse">
+                  <div className="w-full h-60 bg-gray-200"></div>
+                  <div className="p-6">
+                    <div className="h-6 bg-gray-200 rounded mb-2"></div>
+                    <div className="h-4 bg-gray-200 rounded mb-4"></div>
+                    <div className="h-4 bg-gray-200 rounded mb-4"></div>
+                    <div className="flex justify-between items-center">
+                      <div className="h-6 w-16 bg-gray-200 rounded"></div>
+                      <div className="h-8 w-24 bg-gray-200 rounded"></div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-
-            <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              viewport={{ once: true }}
-              whileHover={{ y: -5 }}
-              className="service-card bg-white rounded-lg overflow-hidden"
-            >
-              <img 
-                src="https://images.unsplash.com/photo-1632345031435-8727f6897d53?q=80&w=600&auto=format&fit=crop" 
-                alt="Nail Extensions" 
-                className="w-full h-60 object-cover transition-transform duration-300"
-              />
-              <div className="p-6">
-                <h3 className="text-xl font-semibold mb-2">Nail Extensions</h3>
-                <p className="text-gray-600 mb-4">Custom-length nail extensions with your choice of design and embellishments.</p>
-                <div className="flex justify-between items-center">
-                  <span className="text-nail-purple font-semibold">$55</span>
-                  <Button asChild variant="outline" className="border-nail-purple text-nail-purple hover:bg-nail-purple/10">
-                    <Link to="/services">Learn More</Link>
-                  </Button>
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              viewport={{ once: true }}
-              whileHover={{ y: -5 }}
-              className="service-card bg-white rounded-lg overflow-hidden"
-            >
-              <img 
-                src="https://images.unsplash.com/photo-1607779097040-26e80aa78e66?q=80&w=600&auto=format&fit=crop" 
-                alt="Nail Art Designs" 
-                className="w-full h-60 object-cover transition-transform duration-300"
-              />
-              <div className="p-6">
-                <h3 className="text-xl font-semibold mb-2">Nail Art Designs</h3>
-                <p className="text-gray-600 mb-4">Custom nail art from simple patterns to elaborate hand-painted designs.</p>
-                <div className="flex justify-between items-center">
-                  <span className="text-nail-purple font-semibold">$20+</span>
-                  <Button asChild variant="outline" className="border-nail-purple text-nail-purple hover:bg-nail-purple/10">
-                    <Link to="/services">Learn More</Link>
-                  </Button>
-                </div>
-              </div>
-            </motion.div>
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {services.map((service, index) => (
+                <motion.div 
+                  key={service.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  whileHover={{ y: -5 }}
+                  className="service-card bg-white rounded-lg overflow-hidden"
+                >
+                  <img 
+                    src={service.image_url || "placeholder.svg"} 
+                    alt={service.name} 
+                    className="w-full h-60 object-cover transition-transform duration-300"
+                  />
+                  <div className="p-6">
+                    <h3 className="text-xl font-semibold mb-2">{service.name}</h3>
+                    <p className="text-gray-600 mb-4">
+                      {service.description || "Professional nail service with attention to detail."}
+                    </p>
+                    <div className="flex justify-between items-center">
+                      <span className="text-nail-purple font-semibold">${service.price}</span>
+                      <Button asChild variant="outline" className="border-nail-purple text-nail-purple hover:bg-nail-purple/10">
+                        <Link to="/services">Learn More</Link>
+                      </Button>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
 
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -377,9 +392,9 @@ const Home = () => {
             viewport={{ once: true }}
             className="text-center mt-12"
           >
-            <Button asChild variant="outline" className="border-nail-purple text-nail-purple hover:bg-nail-purple/10">
-              <Link to="/booking">Experience It Yourself</Link>
-            </Button>
+            <Link to="/booking" className="inline-flex items-center justify-center space-x-2 border border-nail-purple text-nail-purple hover:bg-nail-purple/10 font-medium px-6 py-3 rounded-full transition-colors duration-200">
+              Experience It Yourself
+            </Link>
           </motion.div>
         </div>
       </section>
@@ -401,9 +416,9 @@ const Home = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Button asChild size="lg" className="bg-nail-purple hover:bg-nail-purple/90">
-                <Link to="/booking">Book Your Appointment</Link>
-              </Button>
+              <Link to="/booking" className="inline-flex items-center justify-center space-x-2 bg-nail-purple hover:bg-purple-700 text-white font-medium px-6 py-3 rounded-full transition-colors duration-200 shadow-sm hover:shadow-md">
+                Book Your Appointment
+              </Link>
             </motion.div>
           </motion.div>
         </div>

@@ -1,39 +1,130 @@
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { NavLink } from "react-router-dom";
-import { Menu, X, Scissors, Home, Sparkles, GraduationCap, Images, User, Phone, Calendar } from "lucide-react";
+import { Menu, X, Heart, Home, Sparkles, GraduationCap, Images, User, Phone, Calendar } from "lucide-react";
 import { Button } from "./ui/button";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isNavbarVisible, setIsNavbarVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    if (isMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isMenuOpen]);
+
+  // Handle scroll-based navigation visibility and menu closing
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      // Close mobile menu when scrolling
+      if (isMenuOpen) {
+        setIsMenuOpen(false);
+      }
+
+      // Only apply hide/show behavior on mobile (below md breakpoint)
+      if (window.innerWidth < 768) {
+        if (currentScrollY > lastScrollY && currentScrollY > 100) {
+          // Scrolling down and past 100px - hide navbar
+          setIsNavbarVisible(false);
+        } else if (currentScrollY < lastScrollY) {
+          // Scrolling up - show navbar
+          setIsNavbarVisible(true);
+        }
+      } else {
+        // Always show navbar on desktop
+        setIsNavbarVisible(true);
+      }
+
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [isMenuOpen, lastScrollY]);
+
+  // Handle window resize to ensure navbar is visible on desktop
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setIsNavbarVisible(true);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <motion.header 
       initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className="bg-white/10 backdrop-blur-md border-b border-white/20 fixed w-full top-0 z-50 shadow-lg"
+      animate={{ y: isNavbarVisible ? 0 : -100 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+      className="bg-white/90 backdrop-blur-md border-b border-white/20 fixed w-full top-0 z-50 shadow-lg"
     >
-      <div className="container mx-auto px-4 py-5">
+      <div className="container mx-auto px-4 py-2">
         <div className="flex items-center justify-between">
           <motion.div
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <NavLink to="/" className="flex items-center gap-2">
-              <div className="bg-white p-2 rounded-full shadow-sm hidden sm:flex">
-                <Scissors className="h-6 w-6 text-nail-purple" />
+            <NavLink to="/" className="flex items-center gap-3">
+              {/* Simple Logo Icon */}
+              <div className="relative flex">
+                <motion.div 
+                  className="bg-white p-2 rounded-full shadow-md border border-gray-100"
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <img 
+                    src="/icon2.jpeg" 
+                    alt="Nail Drip Icon" 
+                    className="h-12 w-12 object-cover"
+                  />
+                </motion.div>
               </div>
+              
+              {/* Artistic Logo Text */}
               <div className="flex flex-col sm:flex-row sm:items-center">
-                <h1 className="text-2xl font-bold text-nail-purple">
-                  Nail <span className="text-nail-gold">Drip</span>
-                </h1>
-                <span className="text-xs italic text-gray-700 sm:ml-2 hidden sm:block">Beauty at your fingertips</span>
+                <div className="relative">
+                  <h1 className="text-3xl sm:text-4xl font-black italic" style={{ 
+                    fontFamily: "'Dancing Script', 'Brush Script MT', 'Lucida Handwriting', cursive",
+                    letterSpacing: '0.05em'
+                  }}>
+                    <span className="text-nail-purple">
+                      Nail
+                    </span>
+                    <span className="text-gray-700 ml-2">
+                      Drip
+                    </span>
+                  </h1>
+                </div>
+                <span className="text-xs italic text-gray-600 sm:ml-3 hidden sm:block font-light">
+                  Beauty at your fingertips
+                </span>
               </div>
             </NavLink>
           </motion.div>
@@ -110,45 +201,41 @@ const Navbar = () => {
             >
               <NavLink 
                 to="/booking" 
-                className="inline-flex items-center justify-center space-x-2 bg-gradient-to-r from-nail-purple via-purple-600 to-nail-purple hover:from-purple-600 hover:via-nail-purple hover:to-purple-700 text-white font-semibold px-6 py-2.5 shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-white/20 hover:border-white/40 rounded-md cursor-pointer"
-                style={{
-                  boxShadow: '0 0 20px rgba(155, 135, 245, 0.4), 0 4px 15px rgba(0, 0, 0, 0.1)'
-                }}
+                className="inline-flex items-center justify-center space-x-2 bg-nail-purple hover:bg-purple-700 text-white font-medium px-6 py-2.5 rounded-full transition-colors duration-200 shadow-sm hover:shadow-md"
               >
                 <Calendar size={18} />
-                <span className="text-lg font-bold">Book Now</span>
+                <span className="text-base">Book Now</span>
               </NavLink>
-              {/* Pulse ring effect */}
-              <motion.div
-                className="absolute inset-0 rounded-md border-2 border-nail-purple/50 pointer-events-none"
-                animate={{
-                  scale: [1, 1.1, 1],
-                  opacity: [0.5, 0, 0.5],
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-              />
             </motion.div>
           </div>
 
-          {/* Mobile menu button */}
-          <motion.button 
-            className="md:hidden p-2 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 text-gray-700 hover:bg-nail-purple/10 hover:text-nail-purple hover:border-nail-purple/30 transition-all duration-300"
-            onClick={toggleMenu}
-            aria-label="Toggle menu"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <motion.div
-              animate={{ rotate: isMenuOpen ? 180 : 0 }}
-              transition={{ duration: 0.3 }}
+          {/* Mobile header buttons */}
+          <div className="md:hidden flex items-center space-x-2">
+            {/* Mobile Book Now Button */}
+            <NavLink 
+              to="/booking" 
+              className="inline-flex items-center justify-center space-x-1 bg-nail-purple hover:bg-purple-700 text-white font-medium px-4 py-2.5 rounded-full transition-colors duration-200 shadow-sm hover:shadow-md"
             >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </motion.div>
-          </motion.button>
+              <Calendar size={16} />
+              <span className="text-sm">Book</span>
+            </NavLink>
+
+            {/* Mobile menu button */}
+            <motion.button 
+              className="p-2 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 text-gray-700 hover:bg-nail-purple/10 hover:text-nail-purple hover:border-nail-purple/30 transition-all duration-300"
+              onClick={toggleMenu}
+              aria-label="Toggle menu"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <motion.div
+                animate={{ rotate: isMenuOpen ? 180 : 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </motion.div>
+            </motion.button>
+          </div>
         </div>
       </div>
 
@@ -156,6 +243,7 @@ const Navbar = () => {
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div 
+            ref={menuRef}
             initial={{ opacity: 0, y: -20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.95 }}
@@ -163,9 +251,9 @@ const Navbar = () => {
             className="md:hidden absolute top-full left-0 right-0 z-40"
           >
             <div className="bg-white/95 backdrop-blur-xl border-t border-white/20 shadow-2xl">
-              <div className="container mx-auto px-6 py-6">
+              <div className="container mx-auto px-3 py-2">
                 {/* Navigation Links */}
-                <div className="space-y-2 mb-6">
+                <div className="space-y-1 mb-4">
                   <motion.div
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -175,7 +263,7 @@ const Navbar = () => {
                       to="/"
                       onClick={toggleMenu}
                       className={({ isActive }) => 
-                        `flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 ${
+                        `flex items-center space-x-3 px-3 py-2 rounded-xl transition-all duration-300 ${
                           isActive 
                             ? "bg-nail-purple/10 text-nail-purple border-l-4 border-nail-purple shadow-sm" 
                             : "text-gray-700 hover:bg-nail-purple/5 hover:text-nail-purple hover:shadow-sm"
@@ -196,7 +284,7 @@ const Navbar = () => {
                       to="/services"
                       onClick={toggleMenu}
                       className={({ isActive }) => 
-                        `flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 ${
+                        `flex items-center space-x-3 px-3 py-2 rounded-xl transition-all duration-300 ${
                           isActive 
                             ? "bg-nail-purple/10 text-nail-purple border-l-4 border-nail-purple shadow-sm" 
                             : "text-gray-700 hover:bg-nail-purple/5 hover:text-nail-purple hover:shadow-sm"
@@ -217,7 +305,7 @@ const Navbar = () => {
                       to="/training"
                       onClick={toggleMenu}
                       className={({ isActive }) => 
-                        `flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 ${
+                        `flex items-center space-x-3 px-3 py-2 rounded-xl transition-all duration-300 ${
                           isActive 
                             ? "bg-nail-purple/10 text-nail-purple border-l-4 border-nail-purple shadow-sm" 
                             : "text-gray-700 hover:bg-nail-purple/5 hover:text-nail-purple hover:shadow-sm"
@@ -238,7 +326,7 @@ const Navbar = () => {
                       to="/gallery"
                       onClick={toggleMenu}
                       className={({ isActive }) => 
-                        `flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 ${
+                        `flex items-center space-x-3 px-3 py-2 rounded-xl transition-all duration-300 ${
                           isActive 
                             ? "bg-nail-purple/10 text-nail-purple border-l-4 border-nail-purple shadow-sm" 
                             : "text-gray-700 hover:bg-nail-purple/5 hover:text-nail-purple hover:shadow-sm"
@@ -259,7 +347,7 @@ const Navbar = () => {
                       to="/about"
                       onClick={toggleMenu}
                       className={({ isActive }) => 
-                        `flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 ${
+                        `flex items-center space-x-3 px-3 py-2 rounded-xl transition-all duration-300 ${
                           isActive 
                             ? "bg-nail-purple/10 text-nail-purple border-l-4 border-nail-purple shadow-sm" 
                             : "text-gray-700 hover:bg-nail-purple/5 hover:text-nail-purple hover:shadow-sm"
@@ -280,7 +368,7 @@ const Navbar = () => {
                       to="/contact"
                       onClick={toggleMenu}
                       className={({ isActive }) => 
-                        `flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 ${
+                        `flex items-center space-x-3 px-3 py-2 rounded-xl transition-all duration-300 ${
                           isActive 
                             ? "bg-nail-purple/10 text-nail-purple border-l-4 border-nail-purple shadow-sm" 
                             : "text-gray-700 hover:bg-nail-purple/5 hover:text-nail-purple hover:shadow-sm"
@@ -306,27 +394,11 @@ const Navbar = () => {
                     <NavLink 
                       to="/booking" 
                       onClick={toggleMenu}
-                      className="inline-flex items-center justify-center space-x-3 w-full py-4 text-white font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 border-2 border-white/20 hover:border-white/40 rounded-md cursor-pointer bg-gradient-to-r from-nail-purple via-purple-600 to-nail-purple hover:from-purple-600 hover:via-nail-purple hover:to-purple-700"
-                      style={{
-                        boxShadow: '0 0 25px rgba(155, 135, 245, 0.5), 0 8px 25px rgba(0, 0, 0, 0.15)'
-                      }}
+                      className="inline-flex items-center justify-center space-x-2 w-full py-3 bg-nail-purple hover:bg-purple-700 text-white font-medium rounded-full transition-colors duration-200 shadow-sm hover:shadow-md"
                     >
-                      <Calendar size={22} />
-                      <span className="text-xl font-bold">Book Now</span>
+                      <Calendar size={20} />
+                      <span className="text-base">Book Now</span>
                     </NavLink>
-                    {/* Pulse ring effect for mobile */}
-                    <motion.div
-                      className="absolute inset-0 rounded-md border-2 border-nail-purple/60 pointer-events-none"
-                      animate={{
-                        scale: [1, 1.05, 1],
-                        opacity: [0.6, 0, 0.6],
-                      }}
-                      transition={{
-                        duration: 2.5,
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                      }}
-                    />
                   </motion.div>
                 </div>
               </div>

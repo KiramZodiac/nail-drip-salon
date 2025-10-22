@@ -214,7 +214,7 @@ const About = () => {
                       alt={`${member.first_name} ${member.last_name}`}
                       className="w-full h-96 object-cover transition-transform duration-300 hover:scale-105"
                       style={{
-                        imageRendering: 'high-quality',
+                        imageRendering: 'auto',
                         filter: 'contrast(1.1) brightness(1.05) saturate(1.1)',
                         WebkitFilter: 'contrast(1.1) brightness(1.05) saturate(1.1)',
                         objectPosition: 'center 30%'
@@ -261,9 +261,9 @@ const About = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
               <img 
-                src="https://images.unsplash.com/photo-1607779097040-26e80aa78e66?q=80&w=800&auto=format&fit=crop" 
+                src="pic.jpeg" 
                 alt="Premium Nail Products" 
-                className="rounded-lg shadow-lg"
+                className="w-full h-auto rounded-lg"
               />
             </div>
             <div>
@@ -293,9 +293,9 @@ const About = () => {
           <p className="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">
             Ready to experience our premium nail services? Book an appointment today and let our talented team take care of you.
           </p>
-          <Button asChild size="lg" className="bg-nail-purple hover:bg-nail-purple/90">
-            <Link to="/booking">Book an Appointment</Link>
-          </Button>
+          <Link to="/booking" className="inline-flex items-center justify-center space-x-2 bg-nail-purple hover:bg-purple-700 text-white font-medium px-6 py-3 rounded-full transition-colors duration-200 shadow-sm hover:shadow-md">
+            Book an Appointment
+          </Link>
         </div>
       </section>
     </div>
