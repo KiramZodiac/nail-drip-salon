@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useSearchParams } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -92,6 +93,9 @@ const Booking = () => {
   // Watch the form's service field to get the currently selected service
   const selectedServiceId = form.watch('service');
   const selectedService = services.find(service => service.id === selectedServiceId);
+  
+  // Use preselected service if available, otherwise use the currently selected service
+  const displayService = preselectedService || selectedService;
 
   // Update form when preselected service changes
   useEffect(() => {
@@ -132,16 +136,16 @@ Please confirm my appointment. Thank you!`;
       window.open(whatsappUrl, '_blank');
       
       // Show success message
-      toast.success('Opening WhatsApp...', {
-        description: "Your booking details have been prepared. Please send the message to confirm your appointment."
+      toast.success('Booking Request Submitted', {
+        description: "Your appointment details have been prepared. We'll contact you shortly to confirm your booking."
       });
       
       // Reset the form
       form.reset();
       
     } catch (error) {
-      console.error('Error preparing WhatsApp message:', error);
-      toast.error('Failed to prepare booking message. Please try again.');
+      console.error('Error preparing booking request:', error);
+      toast.error('Failed to submit booking request. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -162,13 +166,91 @@ Please confirm my appointment. Thank you!`;
   return (
     <div>
       {/* Hero Section */}
-      <section className="bg-nail-lavender py-32">
-        <div className="container mx-auto px-4">
+      <section className="py-32 relative overflow-hidden">
+        {/* Background Image */}
+        <AnimatePresence mode="wait">
+          {displayService && displayService.image_url ? (
+            <motion.div 
+              key={displayService.id}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.8 }}
+              className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+              style={{
+                backgroundImage: `url(${displayService.image_url})`,
+              }}
+            >
+              {/* Overlay for better text readability */}
+              <div className="absolute inset-0 bg-black/40" />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/30 to-black/50" />
+            </motion.div>
+          ) : (
+            <motion.div 
+              key="default-bg"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.8 }}
+              className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+              style={{
+                backgroundImage: `url('/bg.jpeg')`,
+              }}
+            >
+              {/* Overlay for better text readability */}
+              <div className="absolute inset-0 bg-black/40" />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/30 to-black/50" />
+            </motion.div>
+          )}
+        </AnimatePresence>
+        
+        <div className="container mx-auto px-4 relative z-10">
           <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Book an Appointment</h1>
-            <p className="text-lg text-gray-700 max-w-2xl mx-auto">
-              Schedule your visit to Nail Drip and treat yourself to a luxurious nail experience.
-            </p>
+            <AnimatePresence mode="wait">
+              {displayService ? (
+                <motion.div
+                  key={`service-${displayService.id}`}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -30 }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white drop-shadow-lg">
+                    Book {displayService.name}
+                  </h1>
+                  <p className="text-lg text-white/90 max-w-2xl mx-auto drop-shadow-md">
+                    {displayService.description || 'Schedule your visit to Nail Drip and treat yourself to a luxurious nail experience.'}
+                  </p>
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                    className="mt-6 inline-flex items-center space-x-4 bg-white/20 backdrop-blur-md rounded-full px-6 py-3 border border-white/30"
+                  >
+                    <span className="text-white font-semibold">${displayService.price}</span>
+                    <span className="text-white/80 text-sm">
+                      {displayService.duration_minutes < 60 
+                        ? `${displayService.duration_minutes} minutes` 
+                        : `${Math.floor(displayService.duration_minutes / 60)}h ${displayService.duration_minutes % 60}m`
+                      }
+                    </span>
+                  </motion.div>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="default"
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -30 }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white drop-shadow-lg">Book an Appointment</h1>
+                  <p className="text-lg text-white/90 max-w-2xl mx-auto drop-shadow-md">
+                    Schedule your visit to Nail Drip and treat yourself to a luxurious nail experience.
+                  </p>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </section>
@@ -180,27 +262,27 @@ Please confirm my appointment. Thank you!`;
             <div className="md:col-span-2">
               <Card>
                 <CardContent className="p-8">
-                  <h2 className="text-2xl font-bold mb-6">Book via WhatsApp</h2>
+                  <h2 className="text-2xl font-bold mb-6">Book Your Appointment</h2>
                   <p className="text-gray-600 mb-6">
-                    Fill out the form below and we'll open WhatsApp with your booking details ready to send. 
-                    Simply tap send to confirm your appointment!
+                    Complete the form below to schedule your visit. We'll prepare your appointment details and 
+                    connect you with our team to confirm your booking.
                   </p>
                   
-                  {selectedService && (
+                  {displayService && (
                     <div className="mb-6 p-4 bg-nail-pink/20 border border-nail-purple/20 rounded-lg">
                       <h3 className="font-semibold text-nail-purple mb-2">Selected Service</h3>
                       <p className="text-gray-700">
-                        <strong>{selectedService.name}</strong> - ${selectedService.price}
-                        {selectedService.description && (
+                        <strong>{displayService.name}</strong> - ${displayService.price}
+                        {displayService.description && (
                           <span className="block text-sm text-gray-600 mt-1">
-                            {selectedService.description}
+                            {displayService.description}
                           </span>
                         )}
                       </p>
                       <p className="text-xs text-gray-500 mt-2">
-                        Duration: {selectedService.duration_minutes < 60 
-                          ? `${selectedService.duration_minutes} minutes` 
-                          : `${Math.floor(selectedService.duration_minutes / 60)}h ${selectedService.duration_minutes % 60}m`
+                        Duration: {displayService.duration_minutes < 60 
+                          ? `${displayService.duration_minutes} minutes` 
+                          : `${Math.floor(displayService.duration_minutes / 60)}h ${displayService.duration_minutes % 60}m`
                         }
                       </p>
                     </div>
@@ -364,7 +446,7 @@ Please confirm my appointment. Thank you!`;
                           className="w-full bg-nail-purple hover:bg-nail-purple/90"
                           disabled={isSubmitting}
                         >
-                          {isSubmitting ? "Preparing..." : "Book via WhatsApp"}
+                          {isSubmitting ? "Processing..." : "Book Appointment"}
                         </Button>
                       </div>
                     </form>
@@ -383,15 +465,15 @@ Please confirm my appointment. Thank you!`;
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <span>Monday - Friday</span>
-                      <span>9:00 AM - 8:00 PM</span>
+                      <span>9:00 AM - 11:00 PM</span>
                     </div>
                     <div className="flex justify-between">
                       <span>Saturday</span>
-                      <span>9:00 AM - 6:00 PM</span>
+                      <span>9:00 AM - 11:00 PM</span>
                     </div>
                     <div className="flex justify-between">
                       <span>Sunday</span>
-                      <span>10:00 AM - 4:00 PM</span>
+                      <span>10:00 AM - 11:00 PM</span>
                     </div>
                   </div>
 
@@ -401,7 +483,6 @@ Please confirm my appointment. Thank you!`;
                       <li>Please arrive 5-10 minutes before your appointment time.</li>
                       <li>Cancellations must be made at least 24 hours in advance.</li>
                       <li>Late arrivals may result in shortened service time.</li>
-                      <li>A credit card is required to hold appointments for new clients.</li>
                       <li>For group bookings of 3 or more, please call us directly.</li>
                     </ul>
                   </div>
