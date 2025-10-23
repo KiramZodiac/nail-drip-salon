@@ -1,6 +1,6 @@
 
 import { Link } from "react-router-dom";
-import { Phone, Mail, MapPin, Instagram, Facebook } from "lucide-react";
+import { Phone, Mail, MapPin, Instagram, Facebook, MessageCircle, Twitter } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -13,11 +13,14 @@ const Footer = () => {
               Premium nail salon offering a wide range of nail services with the highest quality products and exceptional care.
             </p>
             <div className="flex space-x-4">
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-nail-purple hover:text-nail-gold transition-colors">
+              <a href="https://instagram.com/nail_drip_salon" target="_blank" rel="noopener noreferrer" className="text-nail-purple hover:text-nail-gold transition-colors">
                 <Instagram size={20} />
               </a>
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-nail-purple hover:text-nail-gold transition-colors">
-                <Facebook size={20} />
+              <a href="https://tiktok.com/@nail_drip" target="_blank" rel="noopener noreferrer" className="text-nail-purple hover:text-nail-gold transition-colors">
+                <MessageCircle size={20} />
+              </a>
+              <a href="https://x.com/nail_drip" target="_blank" rel="noopener noreferrer" className="text-nail-purple hover:text-nail-gold transition-colors">
+                <Twitter size={20} />
               </a>
             </div>
           </div>
@@ -68,8 +71,8 @@ const Footer = () => {
               </div>
               <div className="flex items-center">
                 <Mail size={18} className="text-nail-purple mr-2" />
-                <a href="mailto:info@naildripnails.com" className="text-gray-600 hover:text-nail-purple transition-colors">
-                  info@naildrip.com
+                <a href="mailto:frankmuliika0@gmail.com" className="text-gray-600 hover:text-nail-purple transition-colors">
+                  frankmuliika0@gmail.com
                 </a>
               </div>
             </div>

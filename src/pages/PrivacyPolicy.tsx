@@ -10,7 +10,7 @@ const PrivacyPolicy = () => {
           
           <div className="prose max-w-none">
             <p className="text-gray-600 mb-6">
-              Last Updated: May 1, 2025
+              Last Updated: October 23, 2025 by Naildrip Nails
             </p>
             
             <section className="mb-8">
@@ -120,10 +120,11 @@ const PrivacyPolicy = () => {
               </p>
               <div className="mt-4">
                 <p className="font-semibold">Naildrip Nails</p>
-                <p>123 Beauty Street</p>
-                <p>Salon City, SC 12345</p>
-                <p>Email: <a href="mailto:privacy@naildripnails.com" className="text-nail-purple hover:underline">privacy@naildripnails.com</a></p>
-                <p>Phone: (123) 456-7890</p>
+                <p>Najanankumbi Stella, Entebbe Road</p>
+                <p>Opposite Daherz Pharmacy, Kampala, Uganda</p>
+                  
+                <p>Email: <a href="mailto:frankmuliika0@gmail.com" className="text-nail-purple hover:underline">privacy@naildripnails.com</a></p>
+                <p>Phone: +256 758 907256</p>
               </div>
             </section>
           </div>

@@ -152,6 +152,7 @@ Please get back to me soon. Thank you!`;
                 </div>
                 <h3 className="text-xl font-semibold mb-2">Call Us</h3>
                 <p className="text-gray-600 mb-2">Phone: +256 758 907256</p>
+                <p className="text-gray-600 mb-2">Phone: 0394878901</p>
                 <p className="text-gray-600">WhatsApp: +256 758 907256</p>
                 <a 
                   href="tel:+256758907256" 
@@ -168,10 +169,10 @@ Please get back to me soon. Thank you!`;
                   <Mail className="h-8 w-8 text-nail-purple" />
                 </div>
                 <h3 className="text-xl font-semibold mb-2">Email Us</h3>
-                <p className="text-gray-600 mb-2">General: info@naildripnails.com</p>
-                <p className="text-gray-600">Bookings: bookings@naildripnails.com</p>
+                <p className="text-gray-600 mb-2">General: frankmuliika0@gmail.com</p>
+                <p className="text-gray-600">Bookings: frankmuliika0@gmail.com</p>
                 <a 
-                  href="mailto:info@naildripnails.com" 
+                  href="mailto:frankmuliika0@gmail.com" 
                   className="text-nail-purple mt-4 hover:underline"
                 >
                   Send Email

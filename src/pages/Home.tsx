@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, useAnimation } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -25,6 +25,29 @@ const Home = () => {
   const [polishCount, setPolishCount] = useState(0);
   const [services, setServices] = useState<Service[]>([]);
   const [servicesLoading, setServicesLoading] = useState(true);
+  const [isHovered, setIsHovered] = useState<number | null>(null);
+
+
+  // Animation controls for testimonials auto-scroll
+const controls = useAnimation();
+
+useEffect(() => {
+  const autoScroll = async () => {
+    while (true) {
+      // move left (halfway since we duplicated testimonials)
+      await controls.start({
+        x: ["0%", "-50%"],
+        transition: {
+          duration: 25, // adjust for speed — lower = faster
+          ease: "linear",
+        },
+      });
+      controls.set({ x: 0 }); // reset instantly
+    }
+  };
+  autoScroll();
+}, [controls]);
+
 
   // Fetch services from database
   const fetchServices = async () => {
@@ -88,6 +111,7 @@ const Home = () => {
 
   const testimonials = [
     {
+      rating:5,
       id: 1,
       content: "The most luxurious nail experience I've ever had. Their attention to detail is unmatched!",
     },
@@ -98,7 +122,29 @@ const Home = () => {
     {
       id: 3,
       content: "Best nail art in town! I always receive compliments on my nails. The technicians are true artists!",
-    }
+    },
+    {
+      id: 4,
+      content: "I've been a customer for years and have never been disappointed. The quality of service is consistently excellent.",
+    },
+    {
+      id: 5,
+      content: "The atmosphere is relaxing and the staff is friendly. I always leave feeling refreshed and pampered.",
+    },
+    {
+      id: 6,
+      content: "The prices are reasonable and the services are worth every penny. I highly recommend this salon to anyone looking for a great nail experience.",
+    },
+    {
+      id: 7,
+      content: "The salon is always clean and the staff is professional. I always leave feeling relaxed and satisfied.",
+    },
+    
+    {
+      id: 9,
+      content: "The prices are reasonable and the services are worth every penny. I highly recommend this salon to anyone looking for a great nail experience.",
+    },
+
   ];
 
 
@@ -332,77 +378,76 @@ const Home = () => {
       {/* Testimonials Section */}
       <section className="py-20 gradient-bg">
         <div className="container mx-auto px-4">
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Client Testimonials & Reviews</h2>
-            <div className="w-24 h-1 bg-nail-purple mx-auto mb-4"></div>
-            <p className="text-gray-700 max-w-xl mx-auto">
-              Hear from our wonderful clients about their experiences at Naildrip Nails.
-            </p>
-          </motion.div>
+          <div className="w-24 h-1 bg-nail-purple mx-auto mb-4"></div>
+          <p className="text-gray-600 max-w-xl mx-auto">
+            Discover why clients love their experience at Naildrip Nails.
+          </p>
+        </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
-            {testimonials.map((testimonial, index) => (
-              <motion.div
-                key={testimonial.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                whileHover={{ y: -5, scale: 1.02 }}
-                className="w-full"
-              >
-                <Card 
-                  className={`relative overflow-hidden transition-all duration-300 bg-gradient-to-br from-white to-gray-50 border-0 ${
-                    isTestimonialHovered === testimonial.id ? "shadow-2xl -translate-y-3 scale-105" : "shadow-lg"
-                  }`}
-                  onMouseEnter={() => setIsTestimonialHovered(testimonial.id)}
-                  onMouseLeave={() => setIsTestimonialHovered(null)}
-                  style={{
-                    borderRadius: '20px 5px 20px 5px'
-                  }}
+        {/* Auto-scrolling testimonials */}
+              <div className="relative w-full overflow-hidden">
+                <motion.div
+                  className="flex space-x-6 md:space-x-10"
+                  animate={controls}
                 >
-                  <CardContent className="p-4 md:p-6 text-center">
-                    <div className="mb-3 md:mb-4">
-                      <div className="text-3xl md:text-4xl text-nail-purple/20 mb-1 md:mb-2">"</div>
-                      <p className="text-gray-800 text-sm md:text-base leading-relaxed font-light italic relative z-10 px-2">
-                        {testimonial.content}
-                      </p>
-                      <div className="text-3xl md:text-4xl text-nail-purple/20 mt-1 md:mt-2 transform rotate-180">"</div>
-                    </div>
-                    <div className="flex justify-center mt-3 md:mt-4">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <Star 
-                          key={star} 
-                          size={14} 
-                          className="text-nail-purple fill-nail-purple/30 mx-0.5 md:mx-1" 
-                        />
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
+                  {[...testimonials, ...testimonials].map((t, index) => (
+              <Card
+                key={index}
+                className="flex-shrink-0 w-[300px] md:w-[360px] bg-white border border-gray-100 shadow-md hover:shadow-lg rounded-2xl transition-transform duration-300"
+              >
+                <CardContent className="p-6 text-center">
+                  <div className="text-4xl text-nail-purple/20 mb-3">“</div>
+                  <p className="text-gray-700 text-sm md:text-base italic leading-relaxed mb-6">
+                    {t.content}
+                  </p>
+                  <div className="text-4xl text-nail-purple/20 -mt-4 transform rotate-180">“</div>
 
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            viewport={{ once: true }}
-            className="text-center mt-12"
-          >
-            <Link to="/booking" className="inline-flex items-center justify-center space-x-2 border border-nail-purple text-nail-purple hover:bg-nail-purple/10 font-medium px-6 py-3 rounded-full transition-colors duration-200">
-              Experience It Yourself
-            </Link>
+                  {/* Star Rating (always 5) */}
+                  <div className="flex justify-center mt-3 mb-4">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Star
+                        key={star}
+                        size={16}
+                        className="text-nail-purple fill-nail-purple mx-0.5"
+                      />
+                    ))}
+                  </div>
+
+                 
+                </CardContent>
+              </Card>
+            ))}
           </motion.div>
         </div>
-      </section>
+
+        {/* CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          viewport={{ once: true }}
+          className="text-center mt-16"
+        >
+          <Link
+            to="/booking"
+            className="inline-flex items-center justify-center space-x-2 border border-nail-purple text-nail-purple hover:bg-nail-purple/10 font-medium px-8 py-3 rounded-full transition-colors duration-200"
+          >
+            Experience It Yourself
+          </Link>
+        </motion.div>
+      </div>
+    </section>
+     
+     
+    
 
       {/* Call to Action */}
       <section className="py-20 bg-white">
