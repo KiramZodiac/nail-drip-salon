@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { NavLink } from "react-router-dom";
-import { Menu, X, Heart, Home, Sparkles, GraduationCap, Images, User, Phone, Calendar } from "lucide-react";
+import { Menu, X, Heart, Home, Sparkles, GraduationCap, Images, User, Phone } from "lucide-react";
 import { Button } from "./ui/button";
 
 const Navbar = () => {
@@ -100,9 +100,9 @@ const Navbar = () => {
                   transition={{ duration: 0.3 }}
                 >
                   <img 
-                    src="/nailpot.jpeg" 
+                    src="/icon.jpeg" 
                     alt="Nail Drip Icon" 
-                    className="h-14 w-14 object-contain rounded-full"
+                    className="h-8 w-8 object-contain rounded-full"
                   />
                 </motion.div>
               </div>
@@ -110,7 +110,7 @@ const Navbar = () => {
               {/* Artistic Logo Text */}
               <div className="flex flex-col">
                 <div className="relative">
-                  <h1 className="text-3xl sm:text-4xl font-black italic" style={{ 
+                  <h1 className="text-3xl max-sm:text-2xl sm:text-2xl font-black italic" style={{ 
                     fontFamily: "'Dancing Script', 'Brush Script MT', 'Lucida Handwriting', cursive",
                     letterSpacing: '0.05em'
                   }}>
@@ -193,33 +193,8 @@ const Navbar = () => {
             </NavLink>
           </nav>
 
-          <div className="hidden md:flex items-center space-x-2">
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="relative"
-            >
-              <NavLink 
-                to="/booking" 
-                className="inline-flex items-center justify-center space-x-2 bg-nail-purple hover:bg-purple-700 text-white font-medium px-6 py-2.5 rounded-full transition-colors duration-200 shadow-sm hover:shadow-md"
-              >
-                <Calendar size={18} />
-                <span className="text-base">Book Now</span>
-              </NavLink>
-            </motion.div>
-          </div>
-
           {/* Mobile header buttons */}
           <div className="md:hidden flex items-center space-x-2">
-            {/* Mobile Book Now Button */}
-            <NavLink 
-              to="/booking" 
-              className="inline-flex items-center justify-center space-x-1 bg-nail-purple hover:bg-purple-700 text-white font-medium px-4 py-2.5 rounded-full transition-colors duration-200 shadow-sm hover:shadow-md"
-            >
-              <Calendar size={16} />
-              <span className="text-sm">Book</span>
-            </NavLink>
-
             {/* Mobile menu button */}
             <motion.button 
               className="p-2 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 text-gray-700 hover:bg-nail-purple/10 hover:text-nail-purple hover:border-nail-purple/30 transition-all duration-300"
@@ -381,26 +356,6 @@ const Navbar = () => {
                   </motion.div>
                 </div>
 
-                {/* Action Buttons */}
-                <div className="pt-4 border-t border-white/20">
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 }}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="relative"
-                  >
-                    <NavLink 
-                      to="/booking" 
-                      onClick={toggleMenu}
-                      className="inline-flex items-center justify-center space-x-2 w-full py-3 bg-nail-purple hover:bg-purple-700 text-white font-medium rounded-full transition-colors duration-200 shadow-sm hover:shadow-md"
-                    >
-                      <Calendar size={20} />
-                      <span className="text-base">Book Now</span>
-                    </NavLink>
-                  </motion.div>
-                </div>
               </div>
             </div>
           </motion.div>
