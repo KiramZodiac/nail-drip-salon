@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Sparkles, Star, Heart, Shield } from "lucide-react";
+import { Sparkles, Star, Heart, Shield, ChevronLeft, ChevronRight, Pause, Play, Volume2, VolumeX } from "lucide-react";
 import Hero from "@/components/Hero";
 import { supabase } from "@/lib/supabase";
 
@@ -26,27 +26,140 @@ const Home = () => {
   const [services, setServices] = useState<Service[]>([]);
   const [servicesLoading, setServicesLoading] = useState(true);
   const [isHovered, setIsHovered] = useState<number | null>(null);
+  
+  // Video section state
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [isVideoMuted, setIsVideoMuted] = useState(true);
+  const [isVideoLoading, setIsVideoLoading] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const videoPlayPromise = useRef<Promise<void> | null>(null);
 
+  // Testimonials scroll state
+  const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  const [isAutoScrollPaused, setIsAutoScrollPaused] = useState(false);
+  const autoScrollRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Animation controls for testimonials auto-scroll
-const controls = useAnimation();
+  const testimonials = [
+    {
+      rating:5,
+      id: 1,
+      content: "The most luxurious nail experience I've ever had. Their attention to detail is unmatched!",
+    },
+    {
+      id: 2,
+      content: "I love how my nails look after every visit. The staff is professional and the salon is always spotlessly clean.",
+    },
+    {
+      id: 3,
+      content: "Best nail art in town! I always receive compliments on my nails. The technicians are true artists!",
+    },
+    {
+      id: 4,
+      content: "I've been a customer for years and have never been disappointed. The quality of service is consistently excellent.",
+    },
+    {
+      id: 5,
+      content: "The atmosphere is relaxing and the staff is friendly. I always leave feeling refreshed and pampered.",
+    },
+    {
+      id: 6,
+      content: "The prices are reasonable and the services are worth every penny. I highly recommend this salon to anyone looking for a great nail experience.",
+    },
+    {
+      id: 7,
+      content: "The salon is always clean and the staff is professional. I always leave feeling relaxed and satisfied.",
+    },
+    {
+      id: 9,
+      content: "The prices are reasonable and the services are worth every penny. I highly recommend this salon to anyone looking for a great nail experience.",
+    },
+  ];
 
-useEffect(() => {
-  const autoScroll = async () => {
-    while (true) {
-      // move left (halfway since we duplicated testimonials)
-      await controls.start({
-        x: ["0%", "-50%"],
-        transition: {
-          duration: 25, // adjust for speed — lower = faster
-          ease: "linear",
-        },
-      });
-      controls.set({ x: 0 }); // reset instantly
+  // Auto-scroll testimonials
+  useEffect(() => {
+    // Clear any existing interval first
+    if (autoScrollRef.current) {
+      clearInterval(autoScrollRef.current);
+      autoScrollRef.current = null;
+    }
+
+    // Only start auto-scroll if not paused
+    if (!isAutoScrollPaused) {
+      autoScrollRef.current = setInterval(() => {
+        setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+      }, 4000); // Change testimonial every 4 seconds
+    }
+
+    return () => {
+      if (autoScrollRef.current) {
+        clearInterval(autoScrollRef.current);
+        autoScrollRef.current = null;
+      }
+    };
+  }, [isAutoScrollPaused, testimonials.length]);
+
+  // Navigation functions
+  const goToPrevious = () => {
+    setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+  };
+
+  const goToNext = () => {
+    setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+  };
+
+  const toggleAutoScroll = () => {
+    console.log('Toggling auto-scroll, current state:', isAutoScrollPaused);
+    setIsAutoScrollPaused(!isAutoScrollPaused);
+  };
+
+  // Video control functions
+  const toggleVideoPlay = async () => {
+    if (!videoRef.current || isVideoLoading) return;
+
+    setIsVideoLoading(true);
+
+    try {
+      if (isVideoPlaying) {
+        // Pause the video
+        videoRef.current.pause();
+        setIsVideoPlaying(false);
+        videoPlayPromise.current = null;
+      } else {
+        // Play the video
+        // Cancel any existing play promise first
+        if (videoPlayPromise.current) {
+          try {
+            await videoPlayPromise.current;
+          } catch (error) {
+            // Ignore errors from cancelled promises
+          }
+        }
+
+        // Start new play promise
+        videoPlayPromise.current = videoRef.current.play();
+        await videoPlayPromise.current;
+        setIsVideoPlaying(true);
+        videoPlayPromise.current = null;
+      }
+    } catch (error) {
+      // Only log if it's not an AbortError (which is expected when interrupted)
+      if (error.name !== 'AbortError') {
+        console.log('Video play/pause error:', error);
+      }
+      // Reset state on error
+      setIsVideoPlaying(false);
+      videoPlayPromise.current = null;
+    } finally {
+      setIsVideoLoading(false);
     }
   };
-  autoScroll();
-}, [controls]);
+
+  const toggleVideoMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !isVideoMuted;
+      setIsVideoMuted(!isVideoMuted);
+    }
+  };
 
 
   // Fetch services from database
@@ -109,43 +222,15 @@ useEffect(() => {
     fetchServices();
   }, []);
 
-  const testimonials = [
-    {
-      rating:5,
-      id: 1,
-      content: "The most luxurious nail experience I've ever had. Their attention to detail is unmatched!",
-    },
-    {
-      id: 2,
-      content: "I love how my nails look after every visit. The staff is professional and the salon is always spotlessly clean.",
-    },
-    {
-      id: 3,
-      content: "Best nail art in town! I always receive compliments on my nails. The technicians are true artists!",
-    },
-    {
-      id: 4,
-      content: "I've been a customer for years and have never been disappointed. The quality of service is consistently excellent.",
-    },
-    {
-      id: 5,
-      content: "The atmosphere is relaxing and the staff is friendly. I always leave feeling refreshed and pampered.",
-    },
-    {
-      id: 6,
-      content: "The prices are reasonable and the services are worth every penny. I highly recommend this salon to anyone looking for a great nail experience.",
-    },
-    {
-      id: 7,
-      content: "The salon is always clean and the staff is professional. I always leave feeling relaxed and satisfied.",
-    },
-    
-    {
-      id: 9,
-      content: "The prices are reasonable and the services are worth every penny. I highly recommend this salon to anyone looking for a great nail experience.",
-    },
+  // Cleanup video promise on unmount
+  useEffect(() => {
+    return () => {
+      if (videoPlayPromise.current) {
+        videoPlayPromise.current = null;
+      }
+    };
+  }, []);
 
-  ];
 
 
   return (
@@ -165,7 +250,7 @@ useEffect(() => {
             className="relative flex justify-center"
           >
             <img
-              src="bg.jpeg" // Using existing image from public folder
+              src="main2.jpeg" // Using existing image from public folder
               alt="Nail polish splash"
               className="w-[500px] h-[500px] object-cover rounded-lg drop-shadow-2xl animate"
               loading="lazy"
@@ -375,6 +460,143 @@ useEffect(() => {
         </div>
       </section>
 
+      {/* Video Section */}
+      <section className="py-20 bg-gradient-to-br from-pink-50 to-purple-50">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Experience Our Salon</h2>
+            <div className="w-24 h-1 bg-nail-purple mx-auto mb-4"></div>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Take a virtual tour of our luxurious salon and see the quality of our services in action.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            viewport={{ once: true }}
+            className="relative max-w-4xl mx-auto"
+          >
+            <div className="relative bg-black rounded-2xl overflow-hidden shadow-2xl">
+              {/* Video Element */}
+              <video
+                ref={videoRef}
+                className="w-full h-auto max-h-[500px] object-cover"
+                poster="/main2.jpeg" // Using existing image as poster
+                muted={isVideoMuted}
+                loop
+                playsInline
+                preload="metadata"
+                onPlay={() => {
+                  setIsVideoPlaying(true);
+                  setIsVideoLoading(false);
+                  videoPlayPromise.current = null;
+                }}
+                onPause={() => {
+                  setIsVideoPlaying(false);
+                  setIsVideoLoading(false);
+                  videoPlayPromise.current = null;
+                }}
+                onLoadStart={() => setIsVideoLoading(true)}
+                onCanPlay={() => setIsVideoLoading(false)}
+                onError={(e) => {
+                  console.log('Video error:', e);
+                  setIsVideoLoading(false);
+                }}
+              >
+                {/* You can add your video source here */}
+                <source src="/salon-video.mp4" type="video/mp4" />
+                <source src="/salon-video.webm" type="video/webm" />
+                Your browser does not support the video tag.
+              </video>
+
+              {/* Video Overlay - Only show when paused or loading */}
+              {!isVideoPlaying && (
+                <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+                  <motion.button
+                    whileHover={{ scale: isVideoLoading ? 1 : 1.1 }}
+                    whileTap={{ scale: isVideoLoading ? 1 : 0.95 }}
+                    onClick={toggleVideoPlay}
+                    disabled={isVideoLoading}
+                    className={`bg-white/90 hover:bg-white text-nail-purple rounded-full p-3 shadow-lg transition-all duration-300 ${
+                      isVideoLoading ? 'opacity-50 cursor-not-allowed' : ''
+                    }`}
+                    aria-label="Play video"
+                  >
+                    {isVideoLoading ? (
+                      <div className="w-6 h-6 border-2 border-nail-purple border-t-transparent rounded-full animate-spin"></div>
+                    ) : (
+                      <Play className="w-6 h-6 ml-0.5" />
+                    )}
+                  </motion.button>
+                </div>
+              )}
+
+              {/* Video Controls - Always visible with higher z-index */}
+              <div className="absolute bottom-4 right-4 flex gap-2 z-20">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={toggleVideoMute}
+                  className="bg-black/50 hover:bg-black/70 text-white rounded-full p-1.5 transition-all duration-300"
+                  aria-label={isVideoMuted ? "Unmute video" : "Mute video"}
+                >
+                  {isVideoMuted ? (
+                    <VolumeX className="w-4 h-4" />
+                  ) : (
+                    <Volume2 className="w-4 h-4" />
+                  )}
+                </motion.button>
+              </div>
+
+              {/* Pause Button - Only show when playing and hovering, lower z-index */}
+              {isVideoPlaying && (
+                <div className="absolute inset-0 bg-black/0 hover:bg-black/10 flex items-center justify-center transition-all duration-300 group z-10">
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={toggleVideoPlay}
+                    className="bg-white/90 hover:bg-white text-nail-purple rounded-full p-2 shadow-lg transition-all duration-300 opacity-0 group-hover:opacity-100"
+                    aria-label="Pause video"
+                  >
+                    <Pause className="w-5 h-5" />
+                  </motion.button>
+                </div>
+              )}
+
+              {/* Video Info Overlay */}
+              <div className="absolute top-4 left-4 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
+                <span className="flex items-center gap-1">
+                  <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                  Live Experience
+                </span>
+              </div>
+            </div>
+
+            {/* Video Description */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              viewport={{ once: true }}
+              className="text-center mt-8"
+            >
+              <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+                Watch our skilled technicians create beautiful nail art and provide exceptional service 
+                in our state-of-the-art salon environment.
+              </p>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
       {/* Testimonials Section */}
       <section className="py-20 gradient-bg">
         <div className="container mx-auto px-4">
@@ -392,40 +614,89 @@ useEffect(() => {
           </p>
         </motion.div>
 
-        {/* Auto-scrolling testimonials */}
-              <div className="relative w-full overflow-hidden">
-                <motion.div
-                  className="flex space-x-6 md:space-x-10"
-                  animate={controls}
-                >
-                  {[...testimonials, ...testimonials].map((t, index) => (
-              <Card
-                key={index}
-                className="flex-shrink-0 w-[300px] md:w-[360px] bg-white border border-gray-100 shadow-md hover:shadow-lg rounded-2xl transition-transform duration-300"
-              >
-                <CardContent className="p-6 text-center">
-                  <div className="text-4xl text-nail-purple/20 mb-3">“</div>
-                  <p className="text-gray-700 text-sm md:text-base italic leading-relaxed mb-6">
-                    {t.content}
-                  </p>
-                  <div className="text-4xl text-nail-purple/20 -mt-4 transform rotate-180">“</div>
+        {/* Scrollable testimonials */}
+        <div 
+          className="relative w-full max-w-4xl mx-auto"
+          onMouseEnter={() => setIsAutoScrollPaused(true)}
+          onMouseLeave={() => setIsAutoScrollPaused(false)}
+        >
+          {/* Navigation buttons */}
+          <div className="flex justify-between items-center mb-8">
+            <button
+              onClick={goToPrevious}
+              className="p-2 rounded-full bg-white/80 hover:bg-white shadow-md hover:shadow-lg transition-all duration-200"
+              aria-label="Previous testimonial"
+            >
+              <ChevronLeft className="w-6 h-6 text-nail-purple" />
+            </button>
+            
+            <button
+              onClick={toggleAutoScroll}
+              className="p-2 rounded-full bg-white/80 hover:bg-white shadow-md hover:shadow-lg transition-all duration-200"
+              aria-label={isAutoScrollPaused ? "Resume auto-scroll" : "Pause auto-scroll"}
+            >
+              {isAutoScrollPaused ? (
+                <Play className="w-6 h-6 text-nail-purple" />
+              ) : (
+                <Pause className="w-6 h-6 text-nail-purple" />
+              )}
+            </button>
+            
+            <button
+              onClick={goToNext}
+              className="p-2 rounded-full bg-white/80 hover:bg-white shadow-md hover:shadow-lg transition-all duration-200"
+              aria-label="Next testimonial"
+            >
+              <ChevronRight className="w-6 h-6 text-nail-purple" />
+            </button>
+          </div>
 
-                  {/* Star Rating (always 5) */}
-                  <div className="flex justify-center mt-3 mb-4">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <Star
-                        key={star}
-                        size={16}
-                        className="text-nail-purple fill-nail-purple mx-0.5"
-                      />
-                    ))}
-                  </div>
+          {/* Current testimonial display */}
+          <motion.div
+            key={currentTestimonial}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5 }}
+            className="flex justify-center"
+          >
+            <Card className="w-full max-w-2xl bg-white border border-gray-100 shadow-lg rounded-2xl">
+              <CardContent className="p-8 text-center">
+                <div className="text-4xl text-nail-purple/20 mb-4">"</div>
+                <p className="text-gray-700 text-lg md:text-xl italic leading-relaxed mb-6">
+                  {testimonials[currentTestimonial]?.content}
+                </p>
+                <div className="text-4xl text-nail-purple/20 -mt-4 transform rotate-180">"</div>
 
-                 
-                </CardContent>
-              </Card>
-            ))}
+                {/* Star Rating */}
+                <div className="flex justify-center mt-4 mb-2">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <Star
+                      key={star}
+                      size={20}
+                      className="text-nail-purple fill-nail-purple mx-1"
+                    />
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
           </motion.div>
+
+          {/* Dots indicator */}
+          <div className="flex justify-center mt-6 space-x-2">
+            {testimonials.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentTestimonial(index)}
+                className={`w-3 h-3 rounded-full transition-all duration-200 ${
+                  index === currentTestimonial
+                    ? "bg-nail-purple scale-125"
+                    : "bg-gray-300 hover:bg-gray-400"
+                }`}
+                aria-label={`Go to testimonial ${index + 1}`}
+              />
+            ))}
+          </div>
         </div>
 
         {/* CTA */}
@@ -445,9 +716,6 @@ useEffect(() => {
         </motion.div>
       </div>
     </section>
-     
-     
-    
 
       {/* Call to Action */}
       <section className="py-20 bg-white">
