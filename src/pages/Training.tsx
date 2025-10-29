@@ -190,6 +190,18 @@ const Training = () => {
               >
                 View All Courses
               </Button>
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="border-white text-white hover:bg-white/20 hover:text-white bg-white/10 backdrop-blur-sm"
+                onClick={() => {
+                  document.getElementById('training-requirements')?.scrollIntoView({ 
+                    behavior: 'smooth' 
+                  });
+                }}
+              >
+                View Requirements
+              </Button>
             </div>
           </div>
         </div>
@@ -306,6 +318,221 @@ const Training = () => {
               </div>
             </TabsContent>
           </Tabs>
+        </div>
+      </section>
+
+      {/* Requirements Section */}
+      <section id="training-requirements" className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold mb-4">Training Requirements</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Everything you need for our comprehensive 3-month nail training program
+            </p>
+          </div>
+
+          <div className="max-w-6xl mx-auto">
+            {/* Main Package Info */}
+            <div className="bg-gradient-to-r from-nail-purple to-nail-pink text-white rounded-2xl p-8 mb-12 text-center">
+              <h3 className="text-3xl font-bold mb-4">Complete Training Package</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                  <div className="text-4xl font-bold mb-2">2,000,000/=</div>
+                  <div className="text-lg opacity-90">Single Student</div>
+                </div>
+                <div>
+                  <div className="text-4xl font-bold mb-2">3 Months</div>
+                  <div className="text-lg opacity-90">Duration</div>
+                </div>
+                <div>
+                  <div className="text-4xl font-bold mb-2">All Included</div>
+                  <div className="text-lg opacity-90">Tools & Materials</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Requirements Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {/* Essential Tools */}
+              <div className="bg-gray-50 rounded-xl p-6">
+                <h4 className="text-xl font-semibold text-nail-purple mb-4 flex items-center">
+                  <div className="w-2 h-2 bg-nail-purple rounded-full mr-3"></div>
+                  Essential Tools
+                </h4>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span>Side Cutter (02)</span>
+                    <span className="font-semibold text-nail-purple">Included</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Nail Cutter (02)</span>
+                    <span className="font-semibold text-nail-purple">Included</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Buffer</span>
+                    <span className="font-semibold text-nail-purple">6,000/=</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Drill (1 Pack)</span>
+                    <span className="font-semibold text-nail-purple">18,000/=</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>U.V Lamp</span>
+                    <span className="font-semibold text-nail-purple">35,000/=</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Nail Products */}
+              <div className="bg-gray-50 rounded-xl p-6">
+                <h4 className="text-xl font-semibold text-nail-purple mb-4 flex items-center">
+                  <div className="w-2 h-2 bg-nail-purple rounded-full mr-3"></div>
+                  Nail Products
+                </h4>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span>O.P.I (1 Pack)</span>
+                    <span className="font-semibold text-nail-purple">18,000/=</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Gel Polish (2 tins)</span>
+                    <span className="font-semibold text-nail-purple">40,000/=</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Natural Builder (2 tins)</span>
+                    <span className="font-semibold text-nail-purple">40,000/=</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Clear Builder (1 Pack)</span>
+                    <span className="font-semibold text-nail-purple">25,000/=</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Basecoat & Top</span>
+                    <span className="font-semibold text-nail-purple">40,000/=</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Accessories & Supplies */}
+              <div className="bg-gray-50 rounded-xl p-6">
+                <h4 className="text-xl font-semibold text-nail-purple mb-4 flex items-center">
+                  <div className="w-2 h-2 bg-nail-purple rounded-full mr-3"></div>
+                  Accessories & Supplies
+                </h4>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span>Artificial Nails</span>
+                    <span className="font-semibold text-nail-purple">150,000/=</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Cutex</span>
+                    <span className="font-semibold text-nail-purple">100,000/=</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Glitters</span>
+                    <span className="font-semibold text-nail-purple">100,000/=</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Nail Bits (Manyo)</span>
+                    <span className="font-semibold text-nail-purple">100,000/=</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Demi Hand</span>
+                    <span className="font-semibold text-nail-purple">120,000/=</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Additional Items */}
+              <div className="bg-gray-50 rounded-xl p-6">
+                <h4 className="text-xl font-semibold text-nail-purple mb-4 flex items-center">
+                  <div className="w-2 h-2 bg-nail-purple rounded-full mr-3"></div>
+                  Additional Items
+                </h4>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span>Lace</span>
+                    <span className="font-semibold text-nail-purple">12,000/=</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Bond</span>
+                    <span className="font-semibold text-nail-purple">7,000/=</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Primer</span>
+                    <span className="font-semibold text-nail-purple">20,000/=</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Cuticles</span>
+                    <span className="font-semibold text-nail-purple">15,000/=</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Remover & Cotton</span>
+                    <span className="font-semibold text-nail-purple">20,000/=</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Personal Items */}
+              <div className="bg-gray-50 rounded-xl p-6">
+                <h4 className="text-xl font-semibold text-nail-purple mb-4 flex items-center">
+                  <div className="w-2 h-2 bg-nail-purple rounded-full mr-3"></div>
+                  Personal Items
+                </h4>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span>T-shirt</span>
+                    <span className="font-semibold text-nail-purple">100,000/=</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Towel (02)</span>
+                    <span className="font-semibold text-nail-purple">24,000/=</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Lotion (02)</span>
+                    <span className="font-semibold text-nail-purple">10,000/=</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Spray (02)</span>
+                    <span className="font-semibold text-nail-purple">40,000/=</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Brush & Enplane</span>
+                    <span className="font-semibold text-nail-purple">30,000/=</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Summary */}
+              <div className="bg-nail-pink/10 rounded-xl p-6 border-2 border-nail-pink/20">
+                <h4 className="text-xl font-semibold text-nail-purple mb-4 flex items-center">
+                  <div className="w-2 h-2 bg-nail-purple rounded-full mr-3"></div>
+                  Package Summary
+                </h4>
+                <div className="space-y-3">
+                  <div className="flex justify-between text-lg">
+                    <span className="font-semibold">Total Package</span>
+                    <span className="font-bold text-nail-purple">2,000,000/=</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Excess Money</span>
+                    <span className="font-semibold text-gray-600">15,000/=</span>
+                  </div>
+                  <div className="pt-3 border-t border-nail-pink/30">
+                    <p className="text-sm text-gray-600">
+                      All materials included in package. Complete kit provided upon enrollment.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="text-center mt-12">
+              <Button asChild size="lg" className="bg-nail-purple hover:bg-nail-purple/90">
+                <Link to="/contact">Enroll Now</Link>
+              </Button>
+            </div>
+          </div>
         </div>
       </section>
 
