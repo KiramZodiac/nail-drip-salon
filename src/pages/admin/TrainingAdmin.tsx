@@ -480,7 +480,7 @@ const TrainingAdmin = () => {
                         id="price"
                         value={courseFormData.price_display}
                         onChange={(e) => setCourseFormData({ ...courseFormData, price_display: e.target.value })}
-                        placeholder="e.g., $299"
+                        placeholder="e.g., UGX 50,000"
                       />
                     </div>
                     <div>

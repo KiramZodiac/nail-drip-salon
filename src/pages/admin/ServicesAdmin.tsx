@@ -261,7 +261,7 @@ const ServicesAdmin = () => {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="price" className="text-sm font-medium">Price ($) *</Label>
+                  <Label htmlFor="price" className="text-sm font-medium">Price (UGX) *</Label>
                   <Input
                     id="price"
                     type="number"

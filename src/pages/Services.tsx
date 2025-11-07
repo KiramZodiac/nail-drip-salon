@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { supabase } from "@/lib/supabase";
+import { formatPrice } from "@/lib/utils";
 import SEO from "@/components/SEO";
 
 const Services = () => {
@@ -350,10 +351,6 @@ const ServicesGrid = ({ services, loading }: { services: Service[], loading: boo
 };
 
 const ServiceCard = ({ service }: ServiceCardProps) => {
-  const formatPrice = (price: number) => {
-    return `$${price}`;
-  };
-
   const formatDuration = (minutes: number) => {
     if (minutes < 60) {
       return `${minutes} mins`;

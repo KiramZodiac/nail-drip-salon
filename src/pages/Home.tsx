@@ -435,7 +435,7 @@ const Home = () => {
                       {service.description || "Professional nail service with attention to detail."}
                     </p>
                     <div className="flex justify-between items-center">
-                      <span className="text-nail-purple font-semibold">${service.price}</span>
+                      <span className="text-nail-purple font-semibold">UGX {service.price.toLocaleString('en-US')}</span>
                       <Button asChild variant="outline" className="border-nail-purple text-nail-purple hover:bg-nail-purple/10">
                         <Link to="/services">Learn More</Link>
                       </Button>

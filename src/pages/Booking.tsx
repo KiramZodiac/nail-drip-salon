@@ -7,6 +7,7 @@ import { z } from "zod";
 import { useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/lib/supabase";
+import { formatPrice } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent } from "@/components/ui/card";
@@ -227,7 +228,7 @@ Please confirm my appointment. Thank you!`;
                     transition={{ duration: 0.6, delay: 0.2 }}
                     className="mt-6 inline-flex items-center space-x-4 bg-white/20 backdrop-blur-md rounded-full px-6 py-3 border border-white/30"
                   >
-                    <span className="text-white font-semibold">${displayService.price}</span>
+                    <span className="text-white font-semibold">{formatPrice(displayService.price)}</span>
                     <span className="text-white/80 text-sm">
                       {displayService.duration_minutes < 60 
                         ? `${displayService.duration_minutes} minutes` 

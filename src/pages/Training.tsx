@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Play, Clock, Users, Award, Star, ChevronRight } from "lucide-react";
+import { Play, Clock, Users, Award, Star, ChevronRight, Book, Download, ExternalLink } from "lucide-react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { supabase } from "@/lib/supabase";
 
@@ -195,6 +195,19 @@ const Training = () => {
                 variant="outline" 
                 className="border-white text-white hover:bg-white/20 hover:text-white bg-white/10 backdrop-blur-sm"
                 onClick={() => {
+                  document.getElementById('training-book')?.scrollIntoView({ 
+                    behavior: 'smooth' 
+                  });
+                }}
+              >
+                <Book className="mr-2 h-5 w-5" />
+                Training Book
+              </Button>
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="border-white text-white hover:bg-white/20 hover:text-white bg-white/10 backdrop-blur-sm"
+                onClick={() => {
                   document.getElementById('training-requirements')?.scrollIntoView({ 
                     behavior: 'smooth' 
                   });
@@ -318,6 +331,95 @@ const Training = () => {
               </div>
             </TabsContent>
           </Tabs>
+        </div>
+      </section>
+
+      {/* Training Book/PDF Section */}
+      <section id="training-book" className="py-16 bg-gradient-to-br from-pink-50 to-purple-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold mb-4">Training Resources</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Access our comprehensive training book and educational materials
+            </p>
+          </div>
+
+          <div className="max-w-4xl mx-auto">
+            <Card className="overflow-hidden shadow-xl">
+              <CardContent className="p-8">
+                <div className="flex flex-col md:flex-row items-center gap-8">
+                  {/* Book Icon/Preview */}
+                  <div className="flex-shrink-0">
+                    <div className="bg-gradient-to-br from-nail-purple to-nail-pink p-8 rounded-2xl shadow-lg">
+                      <Book className="h-24 w-24 text-white" />
+                    </div>
+                  </div>
+
+                  {/* Book Info */}
+                  <div className="flex-1 text-center md:text-left">
+                    <h3 className="text-2xl font-bold mb-3 text-gray-900">Training Guide Book</h3>
+                    <p className="text-gray-600 mb-6">
+                      Download our comprehensive training book covering all aspects of professional nail care, 
+                      techniques, and best practices. Perfect for students and professionals alike.
+                    </p>
+                    
+                    {/* Action Buttons */}
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                      <Button
+                        size="lg"
+                        className="bg-nail-purple hover:bg-nail-purple/90"
+                        onClick={() => window.open('/training-book.pdf', '_blank')}
+                      >
+                        <ExternalLink className="mr-2 h-5 w-5" />
+                        View PDF
+                      </Button>
+                      <Button
+                        size="lg"
+                        variant="outline"
+                        className="border-nail-purple text-nail-purple hover:bg-nail-purple/10"
+                        onClick={() => {
+                          const link = document.createElement('a');
+                          link.href = '/training-book.pdf';
+                          link.download = 'training-book.pdf';
+                          document.body.appendChild(link);
+                          link.click();
+                          document.body.removeChild(link);
+                        }}
+                      >
+                        <Download className="mr-2 h-5 w-5" />
+                        Download PDF
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Embedded PDF Viewer */}
+                <div className="mt-8 border-t pt-8">
+                  <h4 className="text-lg font-semibold mb-4 text-center">Preview</h4>
+                  <div className="w-full h-[600px] border rounded-lg overflow-hidden bg-gray-100">
+                    <iframe
+                      src="/training-book.pdf#view=FitH"
+                      className="w-full h-full"
+                      title="Training Book PDF Preview"
+                      style={{ border: 'none' }}
+                    >
+                      <p className="p-4 text-center text-gray-600">
+                        Your browser does not support PDFs. 
+                        <a 
+                          href="/training-book.pdf" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-nail-purple hover:underline ml-1"
+                        >
+                          Click here to download the PDF
+                        </a>
+                      </p>
+                    </iframe>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </section>
 
@@ -690,12 +792,12 @@ const CourseCard = ({ course, onVideoClick }: CourseCardProps) => {
         </div>
         
         <div className="flex justify-between items-center">
-          <span className="text-lg font-bold text-nail-purple">{course.price_display || 'Contact'}</span>
-          <Button asChild size="sm" className="bg-nail-purple hover:bg-nail-purple/90">
+          <span className="text-lg font-bold text-nail-purple">UGX {course.price_display || 'Contact'}</span>
+          {/* <Button asChild size="sm" className="bg-nail-purple hover:bg-nail-purple/90">
             <Link to={`/training/course/${course.id}`}>
               Learn More <ChevronRight className="ml-1 h-3 w-3" />
             </Link>
-          </Button>
+          </Button> */}
         </div>
       </CardContent>
     </Card>

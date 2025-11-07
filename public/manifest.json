@@ -16,19 +16,19 @@
       "src": "/favicon-round.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "/nailpot.jpeg",
-      "sizes": "512x512",
+      "src": "/icon.jpeg",
+      "sizes": "998x1000",
       "type": "image/jpeg",
       "purpose": "any"
     }
   ],
   "screenshots": [
     {
-      "src": "/nailpot.jpeg",
-      "sizes": "1280x720",
+      "src": "/icon.jpeg",
+      "sizes": "998x1000",
       "type": "image/jpeg",
       "form_factor": "wide",
       "label": "Nail Drip Salon Homepage"
