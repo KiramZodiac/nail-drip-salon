@@ -6,6 +6,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Play, Clock, Users, Award, Star, ChevronRight, Book, Download, ExternalLink } from "lucide-react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { Worker, Viewer } from "@react-pdf-viewer/core";
+import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
+import "@react-pdf-viewer/core/lib/styles/index.css";
+import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 import { supabase } from "@/lib/supabase";
 
 interface TrainingCourse {
@@ -43,6 +48,11 @@ const Training = () => {
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
   const [activeMediaCategory, setActiveMediaCategory] = useState<string>('all');
   const tabsListRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
+  
+  // Initialize PDF viewer plugin with default layout
+  // Must be called at top level (not inside hooks) as it may use hooks internally
+  const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
   // Fetch data from database
   useEffect(() => {
@@ -393,28 +403,49 @@ const Training = () => {
                   </div>
                 </div>
 
-                {/* Embedded PDF Viewer */}
+                {/* Embedded PDF Viewer - Using react-pdf-viewer for better compatibility */}
                 <div className="mt-8 border-t pt-8">
                   <h4 className="text-lg font-semibold mb-4 text-center">Preview</h4>
-                  <div className="w-full h-[600px] border rounded-lg overflow-hidden bg-gray-100">
-                    <iframe
-                      src="/training-book.pdf#view=FitH"
-                      className="w-full h-full"
-                      title="Training Book PDF Preview"
-                      style={{ border: 'none' }}
-                    >
-                      <p className="p-4 text-center text-gray-600">
-                        Your browser does not support PDFs. 
-                        <a 
-                          href="/training-book.pdf" 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="text-nail-purple hover:underline ml-1"
-                        >
-                          Click here to download the PDF
-                        </a>
-                      </p>
-                    </iframe>
+                  <div className="w-full h-[600px] md:h-[600px] border rounded-lg overflow-hidden bg-gray-100">
+                    <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
+                      <Viewer 
+                        fileUrl="/training-book.pdf"
+                        plugins={[defaultLayoutPluginInstance]}
+                      />
+                    </Worker>
+                  </div>
+                  {/* Additional options */}
+                  <div className="mt-4 text-center">
+                    <p className="text-sm text-gray-600 mb-2">
+                      Need to download or open in a new tab?
+                    </p>
+                    <div className="flex flex-wrap justify-center gap-2">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="border-nail-purple text-nail-purple hover:bg-nail-purple/10"
+                        onClick={() => window.open('/training-book.pdf', '_blank')}
+                      >
+                        <ExternalLink className="mr-2 h-4 w-4" />
+                        Open in New Tab
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="border-nail-purple text-nail-purple hover:bg-nail-purple/10"
+                        onClick={() => {
+                          const link = document.createElement('a');
+                          link.href = '/training-book.pdf';
+                          link.download = 'training-book.pdf';
+                          document.body.appendChild(link);
+                          link.click();
+                          document.body.removeChild(link);
+                        }}
+                      >
+                        <Download className="mr-2 h-4 w-4" />
+                        Download
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </CardContent>
