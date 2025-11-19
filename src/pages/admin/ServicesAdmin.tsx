@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Plus, Edit, Trash2, Search } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import { formatPrice } from "@/lib/utils";
 import { toast } from "@/components/ui/sonner";
 import FileUpload from "@/components/FileUpload";
 
@@ -26,6 +27,23 @@ interface Service {
   display_order: number | null;
 }
 
+interface ServiceCategory {
+  id: string;
+  name: string;
+  display_order: number | null;
+}
+
+interface ServiceFormData {
+  name: string;
+  description: string;
+  category: string;
+  duration_minutes: number;
+  price: number;
+  image_url: string;
+  display_order: number;
+  is_active: boolean;
+}
+
 const ServicesAdmin = () => {
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
@@ -33,11 +51,16 @@ const ServicesAdmin = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingService, setEditingService] = useState<Service | null>(null);
   const [uploading, setUploading] = useState(false);
-  const [formData, setFormData] = useState({
+  const [categories, setCategories] = useState<ServiceCategory[]>([]);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
+  const [isCategoryDialogOpen, setIsCategoryDialogOpen] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState("");
+  const [categorySaving, setCategorySaving] = useState(false);
+  const [formData, setFormData] = useState<ServiceFormData>({
     name: "",
     description: "",
     category: "",
-    duration_minutes: 30,
+    duration_minutes: 60,
     price: 0,
     image_url: "",
     display_order: 0,
@@ -47,6 +70,33 @@ const ServicesAdmin = () => {
   useEffect(() => {
     fetchServices();
   }, []);
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    if (!formData.category && categories.length > 0) {
+      setFormData((prev) => {
+        if (prev.category) return prev;
+        return { ...prev, category: categories[0].name };
+      });
+    }
+  }, [categories, formData.category]);
+
+  const categoryOptions = useMemo(() => {
+    if (!formData.category) return categories;
+    const exists = categories.some((category) => category.name === formData.category);
+    if (exists) return categories;
+    return [
+      ...categories,
+      {
+        id: "temporary-category",
+        name: formData.category,
+        display_order: null
+      }
+    ];
+  }, [categories, formData.category]);
 
   const fetchServices = async () => {
     try {
@@ -62,6 +112,28 @@ const ServicesAdmin = () => {
       toast.error("Failed to fetch services");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      setCategoriesLoading(true);
+      const { data, error } = await supabase
+        .from('service_categories')
+        .select('*')
+        .order('display_order', { ascending: true })
+        .order('name', { ascending: true });
+
+      if (error) throw error;
+      setCategories(data || []);
+      if ((data?.length ?? 0) === 0) {
+        setFormData((prev) => ({ ...prev, category: "" }));
+      }
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+      toast.error("Failed to fetch categories");
+    } finally {
+      setCategoriesLoading(false);
     }
   };
 
@@ -98,13 +170,30 @@ const ServicesAdmin = () => {
     }
   };
 
+  const formatDuration = (minutes: number | null) => {
+    if (!minutes || minutes <= 0) return "N/A";
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+    const parts: string[] = [];
+
+    if (hours > 0) {
+      parts.push(`${hours} hr${hours !== 1 ? "s" : ""}`);
+    }
+
+    if (remainingMinutes > 0) {
+      parts.push(`${remainingMinutes} min`);
+    }
+
+    return parts.join(" ") || "0 min";
+  };
+
   const handleEdit = (service: Service) => {
     setEditingService(service);
     setFormData({
       name: service.name,
       description: service.description || "",
       category: service.category,
-      duration_minutes: service.duration_minutes,
+      duration_minutes: service.duration_minutes || 60,
       price: service.price,
       image_url: service.image_url || "",
       display_order: service.display_order || 0,
@@ -149,13 +238,43 @@ const ServicesAdmin = () => {
     setFormData({
       name: "",
       description: "",
-      category: "",
-      duration_minutes: 30,
+      category: categories[0]?.name || "",
+      duration_minutes: 60,
       price: 0,
       image_url: "",
       display_order: 0,
       is_active: true
     });
+  };
+
+  const handleAddCategory = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const trimmedName = newCategoryName.trim();
+    if (!trimmedName) {
+      toast.error("Category name is required");
+      return;
+    }
+
+    try {
+      setCategorySaving(true);
+      const { error } = await supabase
+        .from('service_categories')
+        .insert([{ name: trimmedName, display_order: categories.length }]);
+
+      if (error) throw error;
+
+      toast.success("Category added");
+      setNewCategoryName("");
+      setIsCategoryDialogOpen(false);
+      await fetchCategories();
+      setFormData((prev) => ({ ...prev, category: trimmedName }));
+    } catch (error) {
+      console.error('Error adding category:', error);
+      toast.error("Failed to add category");
+    } finally {
+      setCategorySaving(false);
+    }
   };
 
   const handleAddNew = () => {
@@ -220,17 +339,38 @@ const ServicesAdmin = () => {
                 </div>
                 <div>
                   <Label htmlFor="category" className="text-sm font-medium">Category *</Label>
-                  <Select value={formData.category} onValueChange={(value) => setFormData({ ...formData, category: value })}>
-                    <SelectTrigger className="mt-1">
-                      <SelectValue placeholder="Select category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Manicures">Manicures</SelectItem>
-                      <SelectItem value="Pedicures">Pedicures</SelectItem>
-                      <SelectItem value="Extensions">Extensions</SelectItem>
-                      <SelectItem value="Nail Art">Nail Art</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <div className="flex flex-col gap-2 mt-1">
+                    <div className="flex flex-col sm:flex-row gap-2">
+                      <Select
+                        value={formData.category}
+                        onValueChange={(value) => setFormData({ ...formData, category: value })}
+                        disabled={categoriesLoading}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder={categoriesLoading ? "Loading categories..." : "Select category"} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {categoryOptions.length === 0 ? (
+                            <SelectItem value="__no_categories" disabled>
+                              No categories yet
+                            </SelectItem>
+                          ) : (
+                            categoryOptions.map((category) => (
+                              <SelectItem key={category.id} value={category.name}>
+                                {category.name}
+                              </SelectItem>
+                            ))
+                          )}
+                        </SelectContent>
+                      </Select>
+                      <Button type="button" variant="outline" onClick={() => setIsCategoryDialogOpen(true)}>
+                        Add Category
+                      </Button>
+                    </div>
+                    <p className="text-xs text-gray-500">
+                      Add a new category to re-use it for future services.
+                    </p>
+                  </div>
                 </div>
               </div>
 
@@ -253,12 +393,16 @@ const ServicesAdmin = () => {
                   <Input
                     id="duration"
                     type="number"
+                    min={0}
                     value={formData.duration_minutes}
-                    onChange={(e) => setFormData({ ...formData, duration_minutes: parseInt(e.target.value) || 0 })}
-                    placeholder="30"
+                    onChange={(e) => setFormData({ ...formData, duration_minutes: parseInt(e.target.value, 10) || 0 })}
+                    placeholder="90"
                     className="mt-1"
                     required
                   />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Approx. {formatDuration(formData.duration_minutes)} ({formData.duration_minutes || 0} min)
+                  </p>
                 </div>
                 <div>
                   <Label htmlFor="price" className="text-sm font-medium">Price (UGX) *</Label>
@@ -359,6 +503,39 @@ const ServicesAdmin = () => {
             </form>
           </DialogContent>
         </Dialog>
+        <Dialog open={isCategoryDialogOpen} onOpenChange={setIsCategoryDialogOpen}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>Add New Category</DialogTitle>
+              <DialogDescription>
+                Create a reusable service category. It will be available in the category list immediately.
+              </DialogDescription>
+            </DialogHeader>
+            <form onSubmit={handleAddCategory} className="space-y-4">
+              <div>
+                <Label htmlFor="new_category_name" className="text-sm font-medium">
+                  Category Name
+                </Label>
+                <Input
+                  id="new_category_name"
+                  value={newCategoryName}
+                  onChange={(e) => setNewCategoryName(e.target.value)}
+                  placeholder="e.g., Spa Treatments"
+                  className="mt-1"
+                  required
+                />
+              </div>
+              <div className="flex justify-end gap-2 pt-2">
+                <Button type="button" variant="outline" onClick={() => setIsCategoryDialogOpen(false)}>
+                  Cancel
+                </Button>
+                <Button type="submit" disabled={categorySaving}>
+                  {categorySaving ? "Saving..." : "Save Category"}
+                </Button>
+              </div>
+            </form>
+          </DialogContent>
+        </Dialog>
       </div>
 
       {/* Search */}
@@ -435,8 +612,10 @@ const ServicesAdmin = () => {
                 </div>
                 <p className="text-sm text-gray-600">{service.description}</p>
                 <div className="flex justify-between text-sm">
-                  <span>Duration: {service.duration_minutes} min</span>
-                  <span className="font-semibold">${service.price}</span>
+                  <span>
+                    Duration: {formatDuration(service.duration_minutes)}{service.duration_minutes ? ` (${service.duration_minutes} min)` : ""}
+                  </span>
+                  <span className="font-semibold">{formatPrice(service.price)}</span>
                 </div>
                 {service.image_url && (
                   <div className="mt-2">

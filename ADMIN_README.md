@@ -58,12 +58,12 @@ The admin panel provides a comprehensive management system for the Nail Drip Sal
 - **Display Order**: Control image sequence
 - **Categories**: Organize by service type
 
-### 5. Contact Messages (`/admin/messages`)
-- **Message Management**: View and respond to customer inquiries
-- **Status Tracking**: New, Read, Replied, Closed
-- **Search & Filter**: Find specific messages
-- **Reply System**: Respond directly to customers
-- **Contact Details**: Name, email, phone, subject, message
+### 5. Bookings Management (`/admin/bookings`)
+- **Central Booking Log**: View every appointment request submitted through the public booking form
+- **Status Tracking**: Pending, Confirmed, Completed, Cancelled
+- **Search & Filter**: Find bookings by client name, phone number, or service
+- **Detail View**: Inspect service selection, preferred date/time, notes, and submission timestamp
+- **Admin Actions**: Update status or delete a booking once handled
 
 ### 6. Staff Management (`/admin/staff`)
 - **Staff Profiles**: Add team members
@@ -89,8 +89,9 @@ The admin panel manages the following database tables:
 2. **training_courses** - Training programs
 3. **training_media** - Course media files
 4. **gallery** - Image gallery
-5. **contact_messages** - Customer inquiries
-6. **staff** - Team members
+5. **bookings** - Appointment requests captured from the website
+6. **contact_messages** - Customer inquiries (captured for reference; not currently surfaced in the admin UI)
+7. **staff** - Team members
 
 ## Security
 
@@ -115,11 +116,12 @@ The admin panel manages the following database tables:
 3. Use the delete button to remove items (with confirmation)
 4. Update status and display order as needed
 
-### Contact Management
-1. View new messages in the Messages section
-2. Update message status as you process them
-3. Use the reply system to respond to customers
-4. Mark messages as closed when resolved
+### Booking Management
+1. Navigate to `/admin/bookings`
+2. Use the search bar or status filter to narrow down the queue
+3. Click the eye icon to review full booking details
+4. Update the status as you confirm, complete, or cancel appointments
+5. Delete entries that are spam or duplicates
 
 ## Technical Details
 

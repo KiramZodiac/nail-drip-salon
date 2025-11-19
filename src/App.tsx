@@ -22,7 +22,7 @@ import HeroAdmin from "./pages/admin/HeroAdmin";
 import ServicesAdmin from "./pages/admin/ServicesAdmin";
 import TrainingAdmin from "./pages/admin/TrainingAdmin";
 import GalleryAdmin from "./pages/admin/GalleryAdmin";
-import ContactAdmin from "./pages/admin/ContactAdmin";
+import BookingsAdmin from "./pages/admin/BookingsAdmin";
 import StaffAdmin from "./pages/admin/StaffAdmin";
 
 const App = () => (
@@ -53,7 +53,8 @@ const App = () => (
         <Route path="/admin/services" element={<ProtectedRoute><AdminLayout><ServicesAdmin /></AdminLayout></ProtectedRoute>} />
         <Route path="/admin/training" element={<ProtectedRoute><AdminLayout><TrainingAdmin /></AdminLayout></ProtectedRoute>} />
         <Route path="/admin/gallery" element={<ProtectedRoute><AdminLayout><GalleryAdmin /></AdminLayout></ProtectedRoute>} />
-        <Route path="/admin/messages" element={<ProtectedRoute><AdminLayout><ContactAdmin /></AdminLayout></ProtectedRoute>} />
+        <Route path="/admin/bookings" element={<ProtectedRoute><AdminLayout><BookingsAdmin /></AdminLayout></ProtectedRoute>} />
+        <Route path="/admin/messages" element={<ProtectedRoute><AdminLayout><BookingsAdmin /></AdminLayout></ProtectedRoute>} />
         <Route path="/admin/staff" element={<ProtectedRoute><AdminLayout><StaffAdmin /></AdminLayout></ProtectedRoute>} />
         
         <Route path="*" element={<Layout><NotFound /></Layout>} />

@@ -8,7 +8,7 @@ import {
   Scissors, 
   GraduationCap, 
   Images, 
-  MessageSquare, 
+  CalendarClock, 
   Users, 
   Settings,
   Menu,
@@ -33,9 +33,9 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
     { name: "Services", href: "/admin/services", icon: Scissors },
     { name: "Training", href: "/admin/training", icon: GraduationCap },
     { name: "Gallery", href: "/admin/gallery", icon: Images },
-    { name: "Messages", href: "/admin/messages", icon: MessageSquare },
+    { name: "Bookings", href: "/admin/bookings", icon: CalendarClock },
     { name: "Staff", href: "/admin/staff", icon: Users },
-    { name: "Settings", href: "/admin/settings", icon: Settings },
+    // { name: "Settings", href: "/admin/settings", icon: Settings },
   ];
 
   const isActive = (href: string) => {

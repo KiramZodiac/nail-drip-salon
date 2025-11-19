@@ -200,6 +200,29 @@ export type Database = {
           updated_at?: string | null
         }
       }
+      service_categories: {
+        Row: {
+          id: string
+          name: string
+          display_order: number | null
+          created_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          id?: string
+          name: string
+          display_order?: number | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: string
+          name?: string
+          display_order?: number | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+      }
       contact_messages: {
         Row: {
           id: string

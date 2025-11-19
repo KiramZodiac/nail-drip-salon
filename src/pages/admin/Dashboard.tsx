@@ -5,7 +5,7 @@ import {
   Scissors, 
   GraduationCap, 
   Images, 
-  MessageSquare, 
+  CalendarClock, 
   Users, 
   TrendingUp,
   Eye,
@@ -19,7 +19,7 @@ const Dashboard = () => {
     services: 0,
     courses: 0,
     gallery: 0,
-    messages: 0,
+    bookings: 0,
     staff: 0
   });
   const [loading, setLoading] = useState(true);
@@ -28,11 +28,11 @@ const Dashboard = () => {
     const fetchStats = async () => {
       try {
         // Fetch counts for each table
-        const [servicesResult, coursesResult, galleryResult, messagesResult, staffResult] = await Promise.all([
+        const [servicesResult, coursesResult, galleryResult, bookingsResult, staffResult] = await Promise.all([
           supabase.from('services').select('*', { count: 'exact', head: true }),
           supabase.from('training_courses').select('*', { count: 'exact', head: true }),
           supabase.from('gallery').select('*', { count: 'exact', head: true }),
-          supabase.from('contact_messages').select('*', { count: 'exact', head: true }),
+          supabase.from('bookings').select('*', { count: 'exact', head: true }),
           supabase.from('staff').select('*', { count: 'exact', head: true })
         ]);
 
@@ -40,7 +40,7 @@ const Dashboard = () => {
           services: servicesResult.count || 0,
           courses: coursesResult.count || 0,
           gallery: galleryResult.count || 0,
-          messages: messagesResult.count || 0,
+          bookings: bookingsResult.count || 0,
           staff: staffResult.count || 0
         });
       } catch (error) {
@@ -76,10 +76,10 @@ const Dashboard = () => {
       color: "bg-purple-500"
     },
     {
-      title: "View Messages",
-      description: "Check customer inquiries",
-      icon: MessageSquare,
-      href: "/admin/messages",
+      title: "View Bookings",
+      description: "Check appointment requests",
+      icon: CalendarClock,
+      href: "/admin/bookings",
       color: "bg-orange-500"
     }
   ];
@@ -151,11 +151,11 @@ const Dashboard = () => {
           <CardContent className="p-6">
             <div className="flex items-center">
               <div className="p-2 bg-orange-100 rounded-lg">
-                <MessageSquare className="h-6 w-6 text-orange-600" />
+                <CalendarClock className="h-6 w-6 text-orange-600" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Messages</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.messages}</p>
+                <p className="text-sm font-medium text-gray-600">Bookings</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.bookings}</p>
               </div>
             </div>
           </CardContent>

@@ -107,46 +107,63 @@ const Booking = () => {
   
   const onSubmit = async (formData) => {
     setIsSubmitting(true);
-    
+
     try {
-      // Get the selected service details
-      const selectedService = services.find(service => service.id === formData.service);
-      
-      // Format the date
+      const selectedService = services.find(
+        (service) => service.id === formData.service
+      );
+
+      const payload = {
+        name: formData.name,
+        phone: formData.phone,
+        service_id: selectedService?.id ?? null,
+        service_name: selectedService?.name ?? null,
+        service_price: selectedService?.price ?? null,
+        appointment_date: formData.date.toISOString(),
+        appointment_time: formData.time,
+        notes: formData.notes?.trim() ? formData.notes.trim() : null,
+        status: "pending",
+        source: "website",
+      };
+
+      const { error: bookingError } = await supabase
+        .from("bookings")
+        .insert([payload]);
+
+      if (bookingError) {
+        throw bookingError;
+      }
+
       const formattedDate = format(formData.date, "EEEE, MMMM do, yyyy");
-      
-      // Create WhatsApp message
+      const formattedPrice = selectedService
+        ? formatPrice(selectedService.price)
+        : "N/A";
+
       const whatsappMessage = `Hello! I would like to book an appointment:
 
 👤 *Name:* ${formData.name}
 📞 *Phone:* ${formData.phone}
-💅 *Service:* ${selectedService?.name} - $${selectedService?.price}
+💅 *Service:* ${selectedService?.name || "Custom"} - ${formattedPrice}
 📅 *Date:* ${formattedDate}
 🕐 *Time:* ${formData.time}
-${formData.notes ? `📝 *Notes:* ${formData.notes}` : ''}
+${formData.notes ? `📝 *Notes:* ${formData.notes}` : ""}
 
 Please confirm my appointment. Thank you!`;
 
-      // Encode the message for URL
       const encodedMessage = encodeURIComponent(whatsappMessage);
-      
-      // Create WhatsApp URL
       const whatsappUrl = `https://wa.me/256758907256?text=${encodedMessage}`;
-      
-      // Open WhatsApp in a new tab/window
-      window.open(whatsappUrl, '_blank');
-      
-      // Show success message
-      toast.success('Booking Request Submitted', {
-        description: "Your appointment details have been prepared. We'll contact you shortly to confirm your booking."
+
+      window.open(whatsappUrl, "_blank");
+
+      toast.success("Booking request stored", {
+        description:
+          "We saved the appointment details and prepared your WhatsApp confirmation.",
       });
-      
-      // Reset the form
+
       form.reset();
-      
     } catch (error) {
-      console.error('Error preparing booking request:', error);
-      toast.error('Failed to submit booking request. Please try again.');
+      console.error("Error submitting booking request:", error);
+      toast.error("Failed to save your booking. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -273,7 +290,7 @@ Please confirm my appointment. Thank you!`;
                     <div className="mb-6 p-4 bg-nail-pink/20 border border-nail-purple/20 rounded-lg">
                       <h3 className="font-semibold text-nail-purple mb-2">Selected Service</h3>
                       <p className="text-gray-700">
-                        <strong>{displayService.name}</strong> - ${displayService.price}
+                        <strong>{displayService.name}</strong> - {formatPrice(displayService.price)}
                         {displayService.description && (
                           <span className="block text-sm text-gray-600 mt-1">
                             {displayService.description}
@@ -339,7 +356,7 @@ Please confirm my appointment. Thank you!`;
                                 ) : (
                                   services.map((service) => (
                                     <SelectItem key={service.id} value={service.id}>
-                                      {service.name} - ${service.price}
+                                      {service.name} - {formatPrice(service.price)}
                                     </SelectItem>
                                   ))
                                 )}

@@ -12,6 +12,7 @@ import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 import { supabase } from "@/lib/supabase";
+import { formatPrice } from "@/lib/utils";
 
 interface TrainingCourse {
   id: string;
@@ -767,6 +768,19 @@ interface CourseCardProps {
   onVideoClick: (videoUrl: string) => void;
 }
 
+const formatCoursePrice = (price: string | null) => {
+  if (!price) return "Contact";
+  const numericString = price.replace(/[^0-9.]/g, "");
+  const numericValue = Number(numericString);
+
+  if (numericString && !Number.isNaN(numericValue) && numericValue > 0) {
+    return formatPrice(numericValue);
+  }
+
+  const trimmed = price.trim();
+  return trimmed.toLowerCase().startsWith("ugx") ? trimmed : `UGX ${trimmed}`;
+};
+
 const CourseCard = ({ course, onVideoClick }: CourseCardProps) => {
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow">
@@ -823,7 +837,7 @@ const CourseCard = ({ course, onVideoClick }: CourseCardProps) => {
         </div>
         
         <div className="flex justify-between items-center">
-          <span className="text-lg font-bold text-nail-purple">UGX {course.price_display || 'Contact'}</span>
+          <span className="text-lg font-bold text-nail-purple">{formatCoursePrice(course.price_display)}</span>
           {/* <Button asChild size="sm" className="bg-nail-purple hover:bg-nail-purple/90">
             <Link to={`/training/course/${course.id}`}>
               Learn More <ChevronRight className="ml-1 h-3 w-3" />

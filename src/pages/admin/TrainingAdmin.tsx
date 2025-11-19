@@ -13,6 +13,7 @@ import { Plus, Edit, Trash2, Search, Upload, Eye, Play, Image as ImageIcon } fro
 import { supabase } from "@/lib/supabase";
 import { toast } from "@/components/ui/sonner";
 import FileUpload from "@/components/FileUpload";
+import { formatPrice } from "@/lib/utils";
 
 interface TrainingCourse {
   id: string;
@@ -48,6 +49,19 @@ interface TrainingMedia {
   is_active: boolean | null;
   display_order: number | null;
 }
+
+const formatCoursePrice = (price: string | null) => {
+  if (!price) return "Contact";
+  const numericString = price.replace(/[^0-9.]/g, "");
+  const numericValue = Number(numericString);
+
+  if (numericString && !Number.isNaN(numericValue) && numericValue > 0) {
+    return formatPrice(numericValue);
+  }
+
+  const trimmed = price.trim();
+  return trimmed.toLowerCase().startsWith("ugx") ? trimmed : `UGX ${trimmed}`;
+};
 
 const TrainingAdmin = () => {
   const [courses, setCourses] = useState<TrainingCourse[]>([]);
@@ -707,7 +721,7 @@ const TrainingAdmin = () => {
                     <p className="text-sm text-gray-600">{course.description}</p>
                     <div className="flex justify-between text-sm">
                       <span>{course.duration}</span>
-                      <span className="font-semibold">{course.price_display}</span>
+                      <span className="font-semibold">{formatCoursePrice(course.price_display)}</span>
                     </div>
                     {course.image_url && (
                       <div className="mt-2">
