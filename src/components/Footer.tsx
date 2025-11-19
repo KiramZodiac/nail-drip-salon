@@ -61,7 +61,16 @@ const Footer = () => {
             <div className="space-y-3">
               <div className="flex items-start">
                 <MapPin size={18} className="text-nail-purple mr-2 mt-1" />
-                <span className="text-gray-600">Najanankumbi Stella, Entebbe Road<br />Opposite Daherz Pharmacy, Kampala, Uganda</span>
+                <span className="text-gray-600">
+                <a 
+                  href="https://www.google.com/maps/place/Nail+Drip+salon/@0.2770599,32.5653045,17z/data=!3m1!4b1!4m6!3m5!1s0x177dbdbc76de9fe7:0xcd24f38a09bd0a6f!8m2!3d0.2770599!4d32.5653045!16s%2Fg%2F11rkg4p3wm?entry=ttu&g_ep=EgoyMDI1MTAxNC4wIKXMDSoASAFQAw%3D%3D" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-gray-600 hover:text-nail-purple transition-colors"
+                >
+                Najanankumbi Stella, Entebbe Road<br />Opposite Daherz Pharmacy, Kampala, Uganda
+                </a>
+                  </span>
               </div>
               <div className="flex items-center">
                 <Phone size={18} className="text-nail-purple mr-2" />
