@@ -113,6 +113,29 @@ const Booking = () => {
         (service) => service.id === formData.service
       );
 
+      // Prepare WhatsApp message BEFORE async operation to avoid popup blocker
+      const formattedDate = format(formData.date, "EEEE, MMMM do, yyyy");
+      const formattedPrice = selectedService
+        ? formatPrice(selectedService.price)
+        : "N/A";
+
+      const whatsappMessage = `Hello! I would like to book an appointment:
+
+👤 *Name:* ${formData.name}
+📞 *Phone:* ${formData.phone}
+💅 *Service:* ${selectedService?.name || "Custom"} - ${formattedPrice}
+📅 *Date:* ${formattedDate}
+🕐 *Time:* ${formData.time}
+${formData.notes ? `📝 *Notes:* ${formData.notes}` : ""}
+
+Please confirm my appointment. Thank you!`;
+
+      const encodedMessage = encodeURIComponent(whatsappMessage);
+      const whatsappUrl = `https://wa.me/256758907256?text=${encodedMessage}`;
+
+      // Open WhatsApp window immediately (before async operation) to avoid popup blocker
+      const whatsappWindow = window.open(whatsappUrl, "_blank");
+
       const payload = {
         name: formData.name,
         phone: formData.phone,
@@ -134,26 +157,16 @@ const Booking = () => {
         throw bookingError;
       }
 
-      const formattedDate = format(formData.date, "EEEE, MMMM do, yyyy");
-      const formattedPrice = selectedService
-        ? formatPrice(selectedService.price)
-        : "N/A";
-
-      const whatsappMessage = `Hello! I would like to book an appointment:
-
-👤 *Name:* ${formData.name}
-📞 *Phone:* ${formData.phone}
-💅 *Service:* ${selectedService?.name || "Custom"} - ${formattedPrice}
-📅 *Date:* ${formattedDate}
-🕐 *Time:* ${formData.time}
-${formData.notes ? `📝 *Notes:* ${formData.notes}` : ""}
-
-Please confirm my appointment. Thank you!`;
-
-      const encodedMessage = encodeURIComponent(whatsappMessage);
-      const whatsappUrl = `https://wa.me/256758907256?text=${encodedMessage}`;
-
-      window.open(whatsappUrl, "_blank");
+      // If popup was blocked, show a message
+      if (!whatsappWindow || whatsappWindow.closed || typeof whatsappWindow.closed === 'undefined') {
+        toast.warning("Popup blocked", {
+          description: "Please allow popups for this site, or click here to open WhatsApp manually.",
+          action: {
+            label: "Open WhatsApp",
+            onClick: () => window.open(whatsappUrl, "_blank"),
+          },
+        });
+      }
 
       toast.success("Booking request stored", {
         description:
